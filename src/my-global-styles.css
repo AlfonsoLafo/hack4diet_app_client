@@ -3,6 +3,7 @@
 
 /* Aplicar fuentes a toda la app */
 @import url('https://fonts.googleapis.com/css2?family=Raleway:wght@500&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=VT323&display=swap');
 
 /* Estilos generales */
 * {
@@ -11,6 +12,41 @@
 
 body {
   --ion-background-color: var(--ion-color-light);
+
+  /* --- Variables del Pager --- */
+  --pager-casing-bg: #f3f4f6;
+  --pager-casing-border: #d1d5db;
+  --pager-brand-color: #4b5563;
+  --pager-btn-bg: #e5e7eb;
+  --pager-btn-border: #9ca3af;
+  --pager-btn-icon: #6b7280;
+  
+  --pager-shadow-highlight: rgba(255, 255, 255, 1);
+  --pager-shadow-lowlight: rgba(0, 0, 0, 0.15);
+}
+
+.toast-puntos-gamificacion {
+  --background: #f1c40f;
+  --color: #000000;
+  --border-radius: 12px;
+  --box-shadow: 0 4px 15px rgba(241, 196, 15, 0.4);
+  font-weight: bold;
+}
+
+/* --- TOAST DE LEVEL UP --- */
+.toast-nivel-gamificacion {
+  --background: var(--ion-color-primary);
+  --color: #ffffff;
+  --border-radius: 12px;
+  font-size: 1.1rem;
+  font-weight: 900;
+  letter-spacing: 0.5px;
+  --box-shadow: 0 6px 20px rgba(var(--ion-color-primary-rgb), 0.6);
+  
+  /* Hacemos que el icono del trofeo sea un poco más grande */
+  ion-icon {
+    font-size: 1.5rem;
+  }
 }
 
 .ion-page {

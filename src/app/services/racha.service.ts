@@ -17,11 +17,15 @@ export class RachaService {
   ) { }
 
   verificarRacha() {
-    return this.http.put(`${environment.base_url}/racha/verificar`, {}, getHeaders());
+    return this.http.put(`${environment.base_url}/usuarios/racha/verificar`, {}, getHeaders());
+  }
+
+  obtenerRachaActual() {
+    return this.http.get(`${environment.base_url}/usuarios/racha`, getHeaders());
   }
 
   obtenerHistorialRacha(mes?: number, anio?: number) {
-    let url = `${environment.base_url}/historial-racha`;
+    let url = `${environment.base_url}/usuarios/historial-racha`;
     
     if (mes && anio) {
       url += `?mes=${mes}&anio=${anio}`;
@@ -31,10 +35,6 @@ export class RachaService {
   }
 
   actualizarRacha() {
-    return this.http.post(`${environment.base_url}/racha`, {}, getHeaders());
-  }
-
-  obtenerRachaActual() {
-    return this.http.get(`${environment.base_url}/racha`, getHeaders());
+    return this.http.post(`${environment.base_url}/usuarios/racha`, {}, getHeaders());
   }
 }

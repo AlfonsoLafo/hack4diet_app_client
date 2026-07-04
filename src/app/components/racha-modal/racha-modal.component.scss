@@ -1,0 +1,128 @@
+.modal-bg {
+  --background: var(--ion-color-light);
+}
+
+.modal-wrapper {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+}
+
+.icon-container {
+  margin-top: 20px;
+  margin-bottom: 10px;
+}
+
+.fire-icon {
+  font-size: 5rem;
+  color: #ff5722;
+  filter: drop-shadow(0 0 10px rgba(255, 87, 34, 0.4));
+}
+
+.heartbeat {
+  animation: heartbeat 1.5s ease-in-out infinite both;
+}
+
+@keyframes heartbeat {
+  from { transform: scale(1); transform-origin: center center; animation-timing-function: ease-out; }
+  10% { transform: scale(0.91); animation-timing-function: ease-in; }
+  17% { transform: scale(0.98); animation-timing-function: ease-out; }
+  33% { transform: scale(0.87); animation-timing-function: ease-in; }
+  45% { transform: scale(1); animation-timing-function: ease-out; }
+}
+
+.title {
+  font-weight: 800;
+  font-size: 1.8rem;
+  margin-bottom: 5px;
+  color: var(--ion-color-dark);
+}
+
+.subtitle {
+  color: var(--ion-color-medium);
+  font-size: 1rem;
+  margin-bottom: 15px;
+  line-height: 1.4;
+  padding: 0 10px;
+}
+
+.points-earned {
+  color: var(--ion-color-success);
+  font-weight: 900;
+  font-size: 1.5rem;
+  margin-bottom: 25px;
+}
+
+.timeline-container {
+  display: flex;
+  overflow-x: auto;
+  gap: 12px;
+  padding: 10px 10px 20px 10px;
+  width: 100%;
+  
+  &::-webkit-scrollbar {
+    display: none;
+  }
+  scrollbar-width: none;
+}
+
+.day-card {
+  flex: 0 0 auto;
+  width: 80px;
+  background: white;
+  border-radius: 12px;
+  padding: 12px 5px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  border: 2px solid transparent;
+  transition: all 0.3s ease;
+
+  .day-title {
+    font-size: 0.85rem;
+    color: var(--ion-color-medium);
+    font-weight: bold;
+    margin-bottom: 5px;
+  }
+
+  .points-value {
+    font-size: 1.2rem;
+    font-weight: 900;
+    color: var(--ion-color-dark);
+  }
+
+  .points-text {
+    font-size: 0.75rem;
+    color: var(--ion-color-medium);
+  }
+
+  &.active {
+    border-color: #ff5722;
+    background: rgba(255, 87, 34, 0.05);
+    transform: scale(1.05);
+    
+    .points-value, .day-title {
+      color: #ff5722;
+    }
+  }
+
+  &.past {
+    background: var(--ion-color-light);
+    opacity: 0.8;
+    
+    .check-icon {
+      position: absolute;
+      top: -8px;
+      right: -8px;
+      color: var(--ion-color-success);
+      font-size: 1.2rem;
+      background: white;
+      border-radius: 50%;
+    }
+  }
+}

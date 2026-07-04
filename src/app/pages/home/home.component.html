@@ -1,3 +1,23 @@
+<ion-card class="streak-week-card">
+  <ion-card-content *ngIf="!loadingRacha">
+    <div class="week-container">
+      
+      <div *ngFor="let dia of diasSemanaHTML" class="day-column">
+        <span class="day-letter">{{ dia.nombre }}</span>
+        <span class="day-number">{{ dia.numero }}</span>
+        
+        <div class="status-circle" [ngClass]="{'completed': dia.completado}">
+          <ion-icon *ngIf="dia.completado" name="checkmark-sharp"></ion-icon>
+        </div>
+      </div>
+
+    </div>
+  </ion-card-content>
+  <ion-card-content *ngIf="loadingRacha" class="ion-text-center">
+    <ion-spinner color="secondary"></ion-spinner>
+  </ion-card-content>
+</ion-card>
+
 <!-- ================== Resumen del dia ================== -->
 <ion-card class="ion-text-center" (click)="redirectTo('/alimentos')">
   <ion-card-header>
@@ -26,6 +46,60 @@
   </ion-card-content>
 </ion-card>
 <!-- ================== Fin Resumen del dia ================== -->
+
+<!-- ================== Inicio misiones ================== -->
+<ion-card class="pager-card" (click)="redirectTo('/misiones')">
+  <ion-card-content class="ion-no-padding">
+    
+    <div class="pager-casing">
+      
+      <div class="pager-brand">
+        <ion-icon name="radio-outline"></ion-icon> TECH4DIET PAGER
+      </div>
+
+      <div class="pager-screen">
+        <div class="screen-header">
+          <span>&#9614;&#9615;</span> 
+          <span>[&#9632;&#9632;&#9632;&#9633;]</span> 
+        </div>
+
+        <div class="screen-body" (click)="revelarMision()">
+          <div class="mission-text" [ngClass]="{'blink-3x': animacionFinalizada}">
+            {{ misionMostrada }}
+          </div>
+        </div>
+
+        <div class="screen-footer">
+          <span>{{ misionViendo ? '+' + misionViendo.puntosOtorgados + ' PTS' : '' }}</span>
+          <span class="prompt-text" *ngIf="textoPrompt !== ''" 
+                [ngClass]="{
+                  'text-success': estadoConfirmacion === 'COMPLETADA',
+                  'text-danger': estadoConfirmacion === 'FALLIDA',
+                  'blinking': textoPrompt === '[ CLICK PARA DESCIFRAR ]'
+                }">
+            {{ textoPrompt }}
+          </span>
+          <span>{{ indiceActual + 1 }}/{{ historialMisiones.length || 1 }}</span>
+        </div>
+      </div>
+
+      <div class="pager-buttons">
+        <div class="pager-btn" (click)="navegarMisiones(1)"><ion-icon name="caret-back-outline"></ion-icon></div>
+        <div class="pager-btn" (click)="navegarMisiones(-1)"><ion-icon name="caret-forward-outline"></ion-icon></div>
+        
+        <div class="pager-btn fail-btn" (click)="intentarCambioEstado('FALLIDA')">
+          <ion-icon name="close-outline"></ion-icon>
+        </div>
+        <div class="pager-btn success-btn" (click)="intentarCambioEstado('COMPLETADA')">
+          <ion-icon name="checkmark-outline"></ion-icon>
+        </div>
+      </div>
+
+    </div>
+
+  </ion-card-content>
+</ion-card>
+<!-- ================== Fin misiones ================== -->
 
 <!-- ================== Resumen peso ================== -->
 <ion-card class="weight-card" (click)="redirectTo('/registros-peso')">

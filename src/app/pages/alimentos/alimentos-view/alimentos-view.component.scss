@@ -3,7 +3,6 @@ ion-card-content {
 }
 
 ion-list {
-  background-color: white;
   padding: 0px;
 }
 
@@ -21,4 +20,14 @@ ion-button {
 
 ion-item {
   border: none;
+}
+
+:host-context(body.dark) {
+  
+  ion-card-title, 
+  ion-card-title div {
+    /* Forzamos a que coja el color de texto claro del tema oscuro */
+    color: var(--ion-text-color) !important;
+  }
+
 }

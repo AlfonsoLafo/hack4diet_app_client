@@ -28,8 +28,8 @@ const routes: Routes = [
       { path: 'home', component: HomeComponent, data: {
                                                   simpleHeader: false,
                                                   titulo: 'Inicio',
-                                                  leftButtonIcon: '',
-                                                  leftButtonUrl: '',
+                                                  leftButtonIcon: 'flame-outline',
+                                                  leftButtonUrl: '/',
                                                   backButtonUrl: ''
                                                 }},
       /********** Alimentos *************/

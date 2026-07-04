@@ -1,0 +1,108 @@
+/* estilo-oscuro.scss */
+
+body.dark {
+  /* =================================================================
+     1. PALETA OFICIAL DE IONIC PARA MODO OSCURO
+     Reemplaza los valores de los imports de @ionic/angular
+     ================================================================= */
+
+    /* --- Variables del Pager (Tema Oscuro) --- */
+  --pager-casing-bg: #1a1c20;
+  --pager-casing-border: #2a2c30;
+  --pager-brand-color: #f1c40f; 
+  --pager-btn-bg: #0d0d0d;
+  --pager-btn-border: #333333;
+  --pager-btn-icon: #555555;
+  
+  --pager-shadow-highlight: rgba(255, 255, 255, 0.05);
+  --pager-shadow-lowlight: rgba(0, 0, 0, 0.9);
+     
+  --ion-color-primary: #cf63fd;
+  
+  --ion-background-color: #1f1d1b;
+  --ion-background-color-rgb: 18,18,18;
+
+  --ion-text-color: #ffffff;
+  --ion-text-color-rgb: 255,255,255;
+
+  /* Escala de pasos */
+  --ion-color-step-50: #1f1d1b;
+  --ion-color-step-100: #2a2a2a;
+  --ion-color-step-150: #363636;
+  --ion-color-step-200: #414141;
+  --ion-color-step-250: #4d4d4d;
+  --ion-color-step-300: #595959;
+  --ion-color-step-350: #656565;
+  --ion-color-step-400: #717171;
+  --ion-color-step-450: #7d7d7d;
+  --ion-color-step-500: #898989;
+  --ion-color-step-550: #949494;
+  --ion-color-step-600: #a0a0a0;
+  --ion-color-step-650: #acacac;
+  --ion-color-step-700: #b8b8b8;
+  --ion-color-step-750: #c4c4c4;
+  --ion-color-step-800: #d0d0d0;
+  --ion-color-step-850: #dbdbdb;
+  --ion-color-step-900: #e7e7e7;
+  --ion-color-step-950: #f3f3f3;
+
+  /* Invertimos los colores 'light', 'medium' y 'dark' estándar */
+  --ion-color-dark: #f4f5f8;
+  --ion-color-dark-rgb: 244,245,248;
+  --ion-color-dark-contrast: #000000;
+  --ion-color-dark-contrast-rgb: 0,0,0;
+  --ion-color-dark-shade: #d7d8da;
+  --ion-color-dark-tint: #f5f6f9;
+
+  --ion-color-medium: #989aa2;
+  --ion-color-medium-rgb: 152,154,162;
+  --ion-color-medium-contrast: #000000;
+  --ion-color-medium-contrast-rgb: 0,0,0;
+  --ion-color-medium-shade: #86888f;
+  --ion-color-medium-tint: #a2a4ab;
+
+  --ion-color-light: #222428;
+  --ion-color-light-rgb: 34,36,40;
+  --ion-color-light-contrast: #ffffff;
+  --ion-color-light-contrast-rgb: 255,255,255;
+  --ion-color-light-shade: #1e2023;
+  --ion-color-light-tint: #383a3e;
+  --ion-color-tertiary-tint: #583068;
+
+  /* =================================================================
+     2. SOBRESCRITURAS DE TUS ESTILOS GLOBALES (my-global-styles.css)
+     Aseguramos que tu personalización no "rompa" el modo oscuro
+     ================================================================= */
+
+  /* Items: Cambiamos el fondo blanco fijo que tenías en my-global-styles */
+  ion-item {
+    --background: #1e1e1e; /* Color del step-50 para dar profundidad */
+    border-bottom: 0.5px solid var(--ion-color-step-150);
+  }
+
+  /* Cards: Quitamos el fondo blanco fijo */
+  ion-card {
+    background-color: #101010;
+  }
+
+  /* Angular Material: Fondos oscuros para los inputs */
+  mat-form-field div {
+    background-color: #1e1e1e !important;
+  }
+
+  /* Searchbar: Sobrescribimos el fondo blanco forzado */
+  ion-searchbar {
+    --background: #1e1e1e !important;
+    --icon-color: var(--ion-color-primary) !important;
+  }
+
+  /* Modales personalizados: si tenías backgrounds fijos, se ajustan aquí */
+  .custom-modal {
+    --background: #121212;
+  }
+
+  /* Subtítulos: Un gris más claro para que contraste en fondo oscuro */
+  .subtitle {
+    color: var(--ion-color-step-600) !important;
+  }
+}

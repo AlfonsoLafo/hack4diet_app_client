@@ -25,6 +25,7 @@
     <ion-buttons *ngIf="leftButtonUrl != ''" slot="end">
       <ion-button [routerLink]="leftButtonUrl">
         <ion-icon style="font-size: 1.5rem;" [name]="leftButtonIcon"></ion-icon>
+        <p *ngIf="leftButtonIcon == 'flame' || leftButtonIcon == 'flame-outline'"> {{rachaActual}} </p>
       </ion-button>
     </ion-buttons>
   </ion-toolbar>

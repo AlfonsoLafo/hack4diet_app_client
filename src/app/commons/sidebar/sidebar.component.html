@@ -1,8 +1,12 @@
 <!-- Header con sidebar -->
 <ion-menu *ngIf="!simpleHeader" contentId="main-content">
   <ion-header class="ion-no-border">
-    <ion-toolbar color="light">
-      <ion-title>Tech4Diet App</ion-title>
+    <ion-toolbar class="sidebar-toolbar">
+      <div class="logo-container">
+        @if (isDarkMode ) {
+          <img src="assets/images/logo/icon230x285_dark.png" alt="Tech4Diet Logo" class="sidebar-logo">
+        } @else {<img src="assets/images/logo/icon230x285.png" alt="Tech4Diet Logo" class="sidebar-logo">}
+      </div>
     </ion-toolbar>
   </ion-header>
   <ion-content class="ion-padding">
@@ -14,4 +18,14 @@
       </ion-item>
     </ion-list>
   </ion-content>
+
+  <ion-footer class="ion-no-border">
+    <ion-toolbar color="light">
+      <div class="theme-toggle-container">
+        <ion-button fill="clear" color="medium" shape="round" class="theme-toggle-btn" (click)="toggleTheme()">
+          <ion-icon slot="start" [name]="isDarkMode ? 'sunny' : 'moon'"></ion-icon>
+        </ion-button>
+      </div>
+    </ion-toolbar>
+  </ion-footer>
 </ion-menu>

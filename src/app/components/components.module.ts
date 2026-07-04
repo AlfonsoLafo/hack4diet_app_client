@@ -12,6 +12,7 @@ import { DatePickerComponent } from './date-picker/date-picker.component';
 import { NumberPickerComponent } from './number-picker/number-picker.component';
 import { LoaderComponent } from './loader/loader.component';
 import { UploadFormComponent } from './upload-form/upload-form.component';
+import { RachaModalComponent } from './racha-modal/racha-modal.component';
 
 @NgModule({
   declarations: [
@@ -19,14 +20,16 @@ import { UploadFormComponent } from './upload-form/upload-form.component';
     DatePickerComponent,
     NumberPickerComponent,
     LoaderComponent,
-    UploadFormComponent
+    UploadFormComponent,
+    RachaModalComponent
   ],
   exports: [
     ProgressBarComponent,
     DatePickerComponent,
     NumberPickerComponent,
     LoaderComponent,
-    UploadFormComponent
+    UploadFormComponent,
+    RachaModalComponent
   ],
   imports: [
     IonicModule,

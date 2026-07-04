@@ -1,12 +1,15 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
+import { RachaModalComponent } from 'src/app/components/racha-modal/racha-modal.component';
 import { NutritionalInfoInterface } from 'src/app/interfaces/nutritional-info.interface';
 import { Alimento } from 'src/app/models/alimento.model';
 import { AlimentosService } from 'src/app/services/alimentos.service';
 import { DiariosService } from 'src/app/services/diarios.service';
 import { ExceptionsService } from 'src/app/services/exceptions.service';
+import { RachaService } from 'src/app/services/racha.service';
 import { ToastService } from 'src/app/services/toast.service';
 import { getAbrebiaturaUnidadMedida } from 'src/app/utils/unidad-medida.utils';
+import { ModalController } from '@ionic/angular';
 
 @Component({
   selector: 'app-registro-alimento-form',
@@ -14,7 +17,6 @@ import { getAbrebiaturaUnidadMedida } from 'src/app/utils/unidad-medida.utils';
   styleUrls: ['./registro-alimento-form.component.scss'],
 })
 export class RegistroAlimentoFormComponent  implements OnInit {
-
   alimento: Alimento = new Alimento('');
   unidadAbrebiada: string = '';
   idDiario: string;
@@ -40,7 +42,9 @@ export class RegistroAlimentoFormComponent  implements OnInit {
     private alimentosService: AlimentosService,
     private toastService: ToastService,
     private diariosService: DiariosService,
-    private exceptionsService: ExceptionsService) { }
+    private exceptionsService: ExceptionsService,
+    private modalController: ModalController,
+    private rachaService: RachaService) { }
 
   ngOnInit() {
     const idAlimento: string = this.diariosService.idAlimentoActual;
@@ -97,6 +101,21 @@ export class RegistroAlimentoFormComponent  implements OnInit {
       categoria: this.categoria
     }
 
+    this.rachaService.actualizarRacha().subscribe(async (res: any) => {
+      //if (res.ok && res.puntosGanados) {
+      if (res.ok) {
+        const modal = await this.modalController.create({
+          component: RachaModalComponent,
+          componentProps: {
+            rachaActual: res.rachaActual,
+            puntosGanados: res.puntosGanados
+          }
+        });
+        await modal.present();
+      }
+    });
+
+
     this.diariosService.addAlimentoConsumido(this.idDiario, alimentoAgregar).subscribe(res => {
       this.router.navigateByUrl('/alimentos');
       this.toastService.presentToast('Alimento añadido', 'success');
@@ -106,6 +125,7 @@ export class RegistroAlimentoFormComponent  implements OnInit {
       this.exceptionsService.throwError(err);
       this.saving = false;
     })
+
   }
 
   validarCantidad() {

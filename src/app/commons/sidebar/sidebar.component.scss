@@ -7,9 +7,54 @@ ion-icon {
 ion-item {
   color: var(--ion-color-primary);
   border: none;
-  --background: var(--ion-color-light) !important;
+  --background: var(--ion-background-color) !important;
+  border: none;
+}
+
+.sidebar-toolbar {
+  background-color: var(--ion-background-color) !important;
+}
+
+.logo-container {
+  display: flex;
+  flex-direction: column;
+  align-items: left;
+  margin-left: 35px;
+  justify-content: center;
+  width: 100%;
+  
+}
+
+.sidebar-logo {
+  width: 120px;
+  height: auto;
+  object-fit: contain;
+  margin-bottom: 10px;
+}
+
+.sidebar-title {
+  background-color: var(--ion-background-color);
+  padding: 0;
+  font-weight: 700;
+  font-size: 1.2rem;
+  letter-spacing: 0.5px;
 }
 
 .bold {
   font-weight: bold;
+}
+
+.theme-toggle-container {
+  background-color: var(--ion-background-color);
+  border: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding-bottom: 45px; /* Sino se oculta en el navbar */
+}
+
+.theme-toggle-btn {  
+  ion-icon {
+    font-size: 1.6rem;
+  }
 }
