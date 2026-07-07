@@ -6,20 +6,25 @@ import { RouterModule } from '@angular/router';
 
 import { PerfilComponent } from './perfil-view/perfil.component';
 import { PesoObjetivoModalComponent } from './perfil-modals/peso-objetivo-modal/peso-objetivo-modal.component';
+import { AmigosComponent } from './gestionar-amigos/amigos.component';
 import { CambiarPlanModalComponent } from './perfil-modals/cambiar-plan-modal/cambiar-plan-modal.component';
 import { ComponentsModule } from 'src/app/components/components.module';
+import { EditarDatosComponent } from './editar-datos/editar-datos.component';
 import { DistribucionComidasModalComponent } from './perfil-modals/distribucion-comidas-modal/distribucion-comidas-modal.component';
 import { CambiarPasswordModalComponent } from './perfil-modals/cambiar-password-modal/cambiar-password-modal.component';
 import { NivelActividadModalComponent } from './perfil-modals/nivel-actividad-modal/nivel-actividad-modal.component';
+import { NgApexchartsModule } from 'ng-apexcharts';
 
 @NgModule({
   declarations: [
     PerfilComponent,
+    EditarDatosComponent,
+    AmigosComponent,
     PesoObjetivoModalComponent,
     CambiarPlanModalComponent,
     DistribucionComidasModalComponent,
     CambiarPasswordModalComponent,
-    NivelActividadModalComponent
+    NivelActividadModalComponent,
   ],
   exports: [],
   imports: [
@@ -28,7 +33,8 @@ import { NivelActividadModalComponent } from './perfil-modals/nivel-actividad-mo
     ReactiveFormsModule,
     CommonModule,
     RouterModule,
-
+    
+    NgApexchartsModule,
     ComponentsModule
   ]
 })

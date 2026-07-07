@@ -1,211 +1,150 @@
-import { Component, OnInit } from '@angular/core';
-import { AlertController, ModalController } from '@ionic/angular';
-import { Usuario } from 'src/app/models/usuario.model';
-import { ToastService } from 'src/app/services/toast.service';
+import { AfterViewInit, Component, OnInit } from '@angular/core';
+import { PuntosService } from 'src/app/services/puntos.service';
 import { UsuariosService } from 'src/app/services/usuarios.service';
-import { PesoObjetivoModalComponent } from '../perfil-modals/peso-objetivo-modal/peso-objetivo-modal.component';
-import { DistribucionComidasModalComponent } from '../perfil-modals/distribucion-comidas-modal/distribucion-comidas-modal.component';
-import { CambiarPasswordModalComponent } from '../perfil-modals/cambiar-password-modal/cambiar-password-modal.component';
-import { CambiarPlanModalComponent } from '../perfil-modals/cambiar-plan-modal/cambiar-plan-modal.component';
-import { Router } from '@angular/router';
-import { ExceptionsService } from 'src/app/services/exceptions.service';
-import { NivelActividadModalComponent } from '../perfil-modals/nivel-actividad-modal/nivel-actividad-modal.component';
+import { RachaService } from 'src/app/services/racha.service';
+import { AmigosService } from 'src/app/services/amigos.service';
 
 @Component({
   selector: 'app-perfil',
   templateUrl: './perfil.component.html',
   styleUrls: ['./perfil.component.scss'],
 })
-export class PerfilComponent implements OnInit {
+export class PerfilComponent implements OnInit, AfterViewInit {
 
-  nombre: string;
-  email: string;
-  altura: number;
-  edad: number;
-  sexo: string;
-  pesoObjetivo: number;
-  pesoObjetivoEntero: number;
-  pesoObjetivoDecimal: number;
-  plan: any;
-  distribucionComidas: string[];
-  configuracion: any;
-
-  establecerObjetivoTxt: string;
-
-  borrandoCuenta: boolean = false;
-  saving: boolean = false;
+  chartOptionsXP: any;
+  
+  nombreUsuario: string = '';
+  nivelActual: number = 1;
+  puntosActuales: number = 0;
+  puntosSiguienteNivel: number = 0;
+  rachaActual: number = 0;
+  maximaRacha: number = 0;
+  
+  leaderboard: any[] = [];
 
   constructor(
+    private puntosService: PuntosService,
     private usuariosService: UsuariosService,
-    private toastService: ToastService,
-    private modalController: ModalController,
-    private router: Router,
-    private alertController: AlertController,
-    private exceptionsService: ExceptionsService) {}
+    private rachaService: RachaService,
+    private amigosService: AmigosService
+  ) { }
 
+  ngAfterViewInit() {    
+    setTimeout(() => {
+      this.cargarHistorialYGenerarGrafico();
+    }, 100);
+  }
+  
   ngOnInit() {
-    this.setData();
+    this.cargarDatosUsuario();
+    this.cargarRachas();
+    this.cargarTablaClasificacion();
   }
 
-  setData() {
-    this.nombre = this.usuariosService.nombre;
-    this.email = this.usuariosService.email;
-    this.altura = this.usuariosService.altura;
-    this.edad = this.usuariosService.edad;
-    this.sexo = this.usuariosService.sexo;
-    this.pesoObjetivo = this.usuariosService.pesoObjetivo;
-    this.pesoObjetivoEntero = this.pesoObjetivo != null ? Math.floor(this.pesoObjetivo) : 70;
-    this.pesoObjetivoDecimal = this.pesoObjetivo != null ? Math.round((this.pesoObjetivo - this.pesoObjetivoEntero)*100) : 0;
-    this.plan = this.usuariosService.plan;
-    this.distribucionComidas = this.usuariosService.distribucionComidas;
-    this.configuracion = this.usuariosService.configuracion;
-    this.establecerObjetivoTxt = this.usuariosService.pesoObjetivo ? 'Cambiar peso objetivo' : 'Establecer peso objetivo';
-  }
-
-  handleGenderChange(event) {
-    this.sexo = event.target.value;
-  }
-
-  updateUser() {
-    this.saving = true;
-    const usuario = new Usuario(this.usuariosService.uid, this.nombre, this.email, null, this.sexo, this.altura, this.edad, null,
-      this.pesoObjetivo, null, null, this.plan, this.distribucionComidas, this.configuracion);
-
-    this.usuariosService.updateUser(usuario).subscribe(res => {
-      this.updateInfoUser();
-      this.toastService.presentToast('Perfil actualizado', 'success');
-      this.saving = false;
-    }, (err) => {
-      this.exceptionsService.throwError(err);
-      this.saving = false;
-    })
-  }
-
-  deleteUser() {
-    this.borrandoCuenta = true;
-    this.usuariosService.deleteUser().subscribe(res => {
-      this.router.navigateByUrl('/login');
-      this.toastService.presentToast('Cuenta eliminada', 'success');
-      this.borrandoCuenta = false;
-    }, (err) => {
-      this.borrandoCuenta = false;
-      this.exceptionsService.throwError(err);
-    });
-  }
-
-  updateInfoUser() {
-    this.usuariosService.validarToken().subscribe(res => { this.setData() });
-  }
-
-  logout() {
-    this.usuariosService.logout();
-  }
-
-  async presentDeleteAccountAlert() {
-    const alert = await this.alertController.create({
-      header: '¡ATENCIÓN! Estás a punto de eliminar tu cuenta',
-      message: 'Todos los datos y registros se borrarán y no se podrán recuperar',
-      buttons: [
-        {
-          text: 'Cancelar',
-          role: 'cancel'
-        },
-        {
-          text: 'Eliminar',
-          cssClass: 'text-danger',
-          handler: () => {
-            this.deleteUser();
-          }
-        }
-      ],
-    });
-
-    await alert.present();
-  }
-
-  // ============ Controladores de los modales ======================= //
-  async openPesoObjetivoModal() {
-    const modal = await this.modalController.create({
-      component: PesoObjetivoModalComponent,
-      componentProps: {
-        pesoObjetivoEntero: this.pesoObjetivoEntero,
-        pesoObjetivoDecimal: this.pesoObjetivoDecimal,
-        establecerObjetivoTxt: this.establecerObjetivoTxt,
-        tieneObjetivo: this.pesoObjetivo != null
+  cargarRachas() {
+    this.rachaService.obtenerRachaActual().subscribe({
+      next: (res: any) => {
+        const datosRacha = res.racha || res; 
+        
+        this.rachaActual = datosRacha.rachaActual || 0;
+        this.maximaRacha = datosRacha.maximaRacha || 0;
+      },
+      error: (err) => {
+        console.error('Error al cargar las rachas:', err);
+        this.rachaActual = 0;
+        this.maximaRacha = 0;
       }
     });
-    modal.present();
+  }
 
-    const { data } = await modal.onWillDismiss();
-    if(data) {
-      if(data.removePesoObjetivo) {
-        this.pesoObjetivoEntero = 70;
-        this.pesoObjetivoDecimal = 0;
-        this.pesoObjetivo = null;
-      } else {
-        this.pesoObjetivoEntero = data.pesoObjetivoEntero;
-        this.pesoObjetivoDecimal = data.pesoObjetivoDecimal;
-        this.pesoObjetivo = this.pesoObjetivoEntero + (this.pesoObjetivoDecimal / 100);
+  cargarDatosUsuario() {
+    this.nombreUsuario = this.usuariosService.nombre;
+    this.puntosActuales = this.usuariosService.puntos;
+    
+    this.nivelActual = Math.floor(0.2 * Math.sqrt(this.puntosActuales)) + 1;
+    this.puntosSiguienteNivel = 25 * Math.pow(this.nivelActual, 2);
+  }
+
+  calcularNivel (puntos: number) {
+    return Math.floor(0.2 * Math.sqrt(puntos)) + 1
+  }
+
+  cargarTablaClasificacion() {
+    const miCodigo = this.usuariosService.codigoAmigo;
+    
+    if (!miCodigo) return;
+
+    this.amigosService.getLeaderboard(miCodigo).subscribe({
+      next: (res: any) => {
+        this.leaderboard = res.leaderboard || [];
+      },
+      error: (err) => {
+        console.error('Error al cargar el leaderboard:', err);
       }
+    });
+  }
 
-      this.updateUser();
+  cargarHistorialYGenerarGrafico() {
+    const hoy = new Date();
+    
+    const hace7Dias = new Date();
+    hace7Dias.setDate(hoy.getDate() - 6);
+    hace7Dias.setHours(0, 0, 0, 0);
+
+    const desde = hace7Dias.toISOString();
+    const hasta = hoy.toISOString(); // Hasta el momento actual
+
+    this.puntosService.getHistorialPuntos(desde, hasta).subscribe((res: any) => {
+      const entradas = res.historial || res.entradas || res; 
+      
+      this.procesarDatos(entradas, hoy);
+    });
+  }
+
+  procesarDatos(entradas: any[], hoy: Date) {
+    const nombresDias = ['D', 'L', 'M', 'X', 'J', 'V', 'S'];
+    const etiquetasX: string[] = [];
+    const datosPuntos: number[] = [0, 0, 0, 0, 0, 0, 0];
+
+    for (let i = 6; i >= 0; i--) {
+      const d = new Date();
+      d.setDate(hoy.getDate() - i);
+      etiquetasX.push(nombresDias[d.getDay()]);
     }
-  }
 
-  async openCambiarPlanModal() {
-    const modal = await this.modalController.create({
-      component: CambiarPlanModalComponent,
-      componentProps: {
-        plan: this.plan
+    const hoyNormalizado = new Date();
+    hoyNormalizado.setHours(0, 0, 0, 0);
+
+    entradas.forEach(entrada => {
+      const fechaEntrada = new Date(entrada.fecha);
+      fechaEntrada.setHours(0, 0, 0, 0);
+
+      const diffTiempo = hoyNormalizado.getTime() - fechaEntrada.getTime();
+      const diffDias = Math.floor(diffTiempo / (1000 * 60 * 60 * 24));
+
+      if (diffDias >= 0 && diffDias <= 6) {
+        const index = 6 - diffDias;
+        datosPuntos[index] += entrada.puntosGanados;
       }
     });
-    modal.present();
 
-    const { data } = await modal.onWillDismiss();
-    if(data) {
-      this.plan = data;
-      this.updateUser();
-    }
+    this.dibujarGrafico(etiquetasX, datosPuntos);
   }
 
-  async openCambiarNivelActividadModal() {
-    const modal = await this.modalController.create({
-      component: NivelActividadModalComponent,
-      componentProps: {
-        nivelActividad: this.plan.nivelActividad
-      }
-    });
-    modal.present();
+  dibujarGrafico(etiquetas: string[], datos: number[]) {
+    const isDarkMode = document.body.classList.contains('dark');
+    const rootStyles = getComputedStyle(document.body);
+    const primaryColor = rootStyles.getPropertyValue('--ion-color-primary').trim() || '#3880ff';
+    const textColor = isDarkMode ? '#ffffff' : '#333333';
+    const gridColor = isDarkMode ? '#333333' : '#e0e0e0';
 
-    const { data } = await modal.onWillDismiss();
-    if(data) {
-      this.plan.nivelActividad = data;
-      this.updateUser();
-    }
+    this.chartOptionsXP = {
+      series: [{ name: "XP Ganada", data: datos }],
+      chart: { type: 'bar', height: 200, toolbar: { show: false }, foreColor: textColor, animations: { enabled: true } },
+      colors: [primaryColor],
+      plotOptions: { bar: { borderRadius: 4, columnWidth: '50%' } },
+      xaxis: { categories: etiquetas, labels: { style: { colors: textColor } } },
+      grid: { borderColor: gridColor, strokeDashArray: 4 }
+    };
   }
-
-  async openDistribucionComidasModal() {
-    const modal = await this.modalController.create({
-      component: DistribucionComidasModalComponent,
-      componentProps: {
-        distribucionComidas: this.distribucionComidas
-      }
-    });
-    modal.present();
-
-    const { data } = await modal.onWillDismiss();
-
-    if(data) {
-      this.distribucionComidas = data;
-      this.updateUser();
-    }
-  }
-
-  async openCambiarPasswordModal() {
-    const modal = await this.modalController.create({
-      component: CambiarPasswordModalComponent
-    });
-    modal.present();
-  }
-
 }

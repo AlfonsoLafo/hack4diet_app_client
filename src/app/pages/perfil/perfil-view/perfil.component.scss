@@ -1,15 +1,285 @@
-.title {
-  color: var(--ion-color-primary);
+.gamified-profile {
+  --background: var(--ion-background-color);
+}
+.main-profile-card {
+  margin: 10px 0 20px 0;
+  border-radius: 15px;
+  position: relative; /* Clave para que el botón flote relativo a la tarjeta */
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+
+  /* Botón de editar flotante */
+  .edit-profile-btn {
+    position: absolute;
+    top: 5px;
+    right: 5px;
+    --color: var(--ion-color-medium);
+    z-index: 10; /* Asegura que sea clickeable por encima del contenido */
+    margin: 0;
+  }
+
+  /* Distribución de la parte superior */
+  .user-info-row {
+    display: flex;
+    align-items: center;
+    margin-bottom: 20px;
+    margin-top: 10px; /* Separamos del borde superior y del botón */
+  }
+
+  .avatar-section {
+    flex-shrink: 0;
+    margin-right: 15px;
+    
+    /* Centramos el avatar y el nivel en columna */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+    .main-avatar {
+      font-size: 5.5rem;
+      color: var(--ion-color-primary);
+      line-height: 1;
+      margin-bottom: 5px; /* Separación con el texto del nivel */
+    }
+
+    .avatar-level {
+      font-size: 0.85rem;
+      font-weight: 900;
+      color: var(--ion-color-primary);
+      background: rgba(var(--ion-color-primary-rgb), 0.15); /* Fondo estilo píldora */
+      padding: 3px 10px;
+      border-radius: 12px;
+      letter-spacing: 0.5px;
+    }
+  }
+
+  .details-section {
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+
+    .profile-name {
+      font-weight: 900;
+      font-size: 1.6rem;
+      /* Reducimos un poco el margen inferior para alinearlo perfecto con el centro del avatar */
+      margin: 0 0 4px 0; 
+      color: var(--ion-text-color);
+      letter-spacing: 0.5px;
+    }
+
+    .xp-bar-wrapper {
+      width: 100%;
+      
+      app-progress-bar {
+        width: 100%;
+        display: block;
+      }
+    }
+  }
+
+  /* Distribución de las insignias */
+  .featured-badges {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    padding-top: 15px;
+    border-top: 1px dashed var(--ion-color-step-150, #e0e0e0);
+
+    .badge {
+      width: 45px;
+      height: 45px;
+      border-radius: 50%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-size: 1.5rem;
+      border: 2px dashed var(--ion-color-medium);
+      
+      &.unlocked {
+        background: rgba(var(--ion-color-warning-rgb), 0.15);
+        border: 2px solid var(--ion-color-warning);
+        color: var(--ion-color-warning);
+        box-shadow: 0 4px 10px rgba(var(--ion-color-warning-rgb), 0.3);
+      }
+
+      &.locked {
+        background: rgba(var(--ion-color-medium-rgb), 0.1);
+        color: var(--ion-color-medium);
+        opacity: 0.5;
+      }
+    }
+  }
 }
 
-ion-spinner {
-  width: 100px;
-  height: 100px;
+/* Modificación de la línea punteada para el modo oscuro */
+:host-context(body.dark) {
+  .main-profile-card {
+    .featured-badges {
+      border-top-color: #333333;
+    }
+  }
 }
 
-.spinner-container {
+/* --- RACHAS --- */
+.streaks-row {
+  margin: 0 -5px 15px -5px;
+
+  .streak-card {
+    margin: 0 5px;
+    border-radius: 15px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+
+    ion-icon {
+      font-size: 2.5rem;
+      margin-bottom: 5px;
+    }
+    .icon-fire { color: #e74c3c; filter: drop-shadow(0 2px 5px rgba(231, 76, 60, 0.4)); }
+    .icon-heart { color: #e67e22; filter: drop-shadow(0 2px 5px rgba(230, 126, 34, 0.4));}
+
+    .streak-title {
+      font-size: 0.8rem;
+      color: var(--ion-color-medium);
+      text-transform: uppercase;
+      font-weight: bold;
+    }
+    .streak-value {
+      font-size: 1.2rem;
+      font-weight: 900;
+      margin-top: 2px;
+    }
+  }
+}
+
+/* --- GRÁFICO --- */
+.chart-card {
+  margin: 0 0 25px 0;
+  border-radius: 15px;
+}
+
+/* --- SEPARADOR Y LEADERBOARD --- */
+.section-separator {
   display: flex;
   align-items: center;
-  justify-content: center;
-  height: 100vh;
+  text-align: center;
+  margin: 30px 10px 20px 10px;
+
+  .line {
+    flex: 1;
+    border-bottom: 2px solid var(--ion-color-step-150, #e0e0e0);
+  }
+  h3 {
+    margin: 0 15px;
+    font-weight: 800;
+    color: var(--ion-color-medium);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    font-size: 0.9rem;
+  }
+}
+
+.manage-friends-btn {
+  margin-bottom: 20px;
+  --border-radius: 10px;
+  font-weight: bold;
+}
+
+/* --- TARJETAS CLASIFICACIÓN --- */
+.leaderboard-section {
+  margin-top: 25px;
+  
+  .section-title h4 {
+    margin: 0 10px 10px 10px;
+    font-weight: 800;
+    text-transform: uppercase;
+    font-size: 0.9rem;
+    color: var(--ion-color-step-600, #666);
+    letter-spacing: 0.5px;
+  }
+}
+
+.leaderboard-list {
+  padding: 0 5px;
+}
+
+.leaderboard-card {
+  margin: 0 0 10px 0;
+  border-radius: 12px;
+  border-left: 5px solid transparent;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+
+  .leaderboard-item {
+    display: flex;
+    align-items: center;
+    padding: 10px 15px;
+  }
+
+  .rank {
+    font-size: 1.2rem;
+    font-weight: 900;
+    width: 25px;
+    color: var(--ion-color-medium);
+  }
+
+  .lb-avatar {
+    font-size: 3rem;
+    color: var(--ion-color-step-400, #999);
+    margin: 0 10px;
+  }
+
+  .lb-info {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+
+    .lb-name {
+      font-weight: bold;
+      font-size: 1.1rem;
+      display: flex;
+      align-items: center;
+      
+      /* Etiqueta para destacar tu propio usuario */
+      .you-tag {
+        font-size: 0.75rem;
+        color: var(--ion-color-primary);
+        margin-left: 6px;
+        font-weight: 800;
+        text-transform: uppercase;
+      }
+    }
+    
+    .lb-stats {
+      font-size: 0.8rem;
+      color: var(--ion-color-medium);
+      margin-top: 2px;
+    }
+  }
+
+  .lb-streak {
+    display: flex;
+    align-items: center;
+    font-weight: 900;
+    font-size: 1.2rem;
+
+    ion-icon {
+      color: #e74c3c;
+      margin-left: 5px;
+    }
+  }
+
+  &.rank-1 { border-left-color: #f1c40f; background: rgba(241, 196, 15, 0.05); }
+  &.rank-2 { border-left-color: #bdc3c7; background: rgba(189, 195, 199, 0.05); }
+  &.rank-3 { border-left-color: #cd7f32; background: rgba(205, 127, 50, 0.05); }
+  
+  /* Destacar la fila del usuario actual (si no está en el top 3) */
+  &.is-me:not(.rank-1):not(.rank-2):not(.rank-3) {
+    border-left-color: var(--ion-color-primary);
+    background: rgba(var(--ion-color-primary-rgb), 0.05);
+  }
+}
+
+/* Ajustes modo oscuro */
+:host-context(body.dark) {
+  .leaderboard-card {
+    --background: #1e1e1e;
+  }
 }

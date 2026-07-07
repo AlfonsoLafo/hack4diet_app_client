@@ -1,0 +1,130 @@
+.friends-page {
+  --background: var(--ion-background-color);
+}
+
+/* Tarjeta de Código Propio */
+.my-code-card {
+  border-radius: 15px;
+  margin-bottom: 25px;
+  background: rgba(var(--ion-color-primary-rgb), 0.05);
+  border: 1px dashed var(--ion-color-primary);
+  box-shadow: none;
+
+  h3 {
+    margin: 0;
+    font-size: 0.9rem;
+    color: var(--ion-color-medium);
+    text-transform: uppercase;
+    font-weight: 800;
+  }
+
+  .code-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 10px 0;
+
+    h2 {
+      margin: 0;
+      font-size: 2.2rem;
+      font-weight: 900;
+      letter-spacing: 3px;
+      color: var(--ion-text-color);
+    }
+
+    ion-button {
+      margin-left: 10px;
+      font-size: 1.2rem;
+    }
+  }
+
+  p {
+    margin: 0;
+    font-size: 0.8rem;
+    color: var(--ion-color-medium);
+  }
+}
+
+/* Input para añadir amigo */
+.add-friend-section {
+  margin-bottom: 30px;
+
+  .input-item {
+    --background: rgba(var(--ion-color-step-150, #e0e0e0), 0.5);
+    --border-radius: 25px;
+    --padding-start: 15px;
+    box-shadow: inset 0 2px 4px rgba(0,0,0,0.02);
+  }
+}
+
+/* Títulos de sección */
+.section-title {
+  margin: 0 10px 10px 10px;
+  h4 {
+    margin: 0;
+    font-weight: 800;
+    text-transform: uppercase;
+    font-size: 0.9rem;
+    color: var(--ion-color-step-600, #666);
+    letter-spacing: 0.5px;
+  }
+}
+
+/* Listas de amigos */
+.friends-list {
+  background: transparent;
+
+  .friend-item {
+    --background: var(--ion-card-background, #fff);
+    --border-radius: 15px;
+    margin-bottom: 10px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+    
+    .fallback-avatar {
+      font-size: 2.5rem;
+      color: var(--ion-color-primary);
+    }
+
+    h2 { font-weight: bold; }
+    
+    p { font-size: 0.8rem; color: var(--ion-color-medium); }
+
+    .pending-text {
+      color: var(--ion-color-warning);
+      font-weight: bold;
+      text-transform: uppercase;
+      font-size: 0.7rem;
+    }
+
+    .action-buttons ion-button {
+      font-size: 1.4rem;
+      margin: 0;
+      --padding-start: 5px;
+      --padding-end: 5px;
+    }
+  }
+
+  /* Borde especial para solicitudes pendientes */
+  .pending-item {
+    border-left: 4px solid var(--ion-color-warning);
+  }
+}
+
+/* Empty State */
+.empty-state {
+  padding: 40px 20px;
+  color: var(--ion-color-medium);
+  
+  ion-icon {
+    font-size: 4rem;
+    opacity: 0.5;
+    margin-bottom: 10px;
+  }
+}
+
+/* Modo oscuro ajustes */
+:host-context(body.dark) {
+  .my-code-card { background: rgba(var(--ion-color-primary-rgb), 0.1); }
+  .add-friend-section .input-item { --background: #1e1e1e; }
+  .friends-list .friend-item { --background: #1e1e1e; }
+}

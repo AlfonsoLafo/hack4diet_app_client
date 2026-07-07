@@ -13,6 +13,7 @@ import { RegistroAlimentoFormComponent } from './alimentos/registro-alimento-for
 import { AlimentoFormComponent } from './alimentos/alimento-form/alimento-form.component';
 import { ConsumoAguaComponent } from './consumo-agua/consumo-agua.component';
 import { PerfilComponent } from './perfil/perfil-view/perfil.component';
+import { EditarDatosComponent } from './perfil/editar-datos/editar-datos.component';
 import { AlimentosBarcodeScannerComponent } from './alimentos/alimentos-barcode-scanner/alimentos-barcode-scanner.component';
 import { MedidasCorporalesComponent } from './medidas-corporales/medidas-corporales.component';
 import { ActividadFisicaListComponent } from './actividad-fisica/actividad-fisica-list/actividad-fisica-list.component';
@@ -20,6 +21,7 @@ import { ActividadFisicaFormComponent } from './actividad-fisica/actividad-fisic
 import { RegistroActividadRealizadaComponent } from './actividad-fisica/registro-actividad-realizada/registro-actividad-realizada.component';
 import { Modelo3dComponent } from './modelo3d/modelo3d.component';
 import { FotosProgresoComponent } from './fotos-progreso/fotos-progreso.component';
+import { AmigosComponent } from './perfil/gestionar-amigos/amigos.component';
 
 const routes: Routes = [
   { path: '', component: AdminLayoutComponent, canActivate: [AuthGuard],
@@ -141,10 +143,25 @@ const routes: Routes = [
       { path: 'perfil', component: PerfilComponent, data: {
                                                                 simpleHeader: false,
                                                                 titulo: 'Mi perfil',
-                                                                leftButtonIcon: '',
-                                                                leftButtonUrl: '',
+                                                                leftButtonIcon: 'settings-outline',
+                                                                leftButtonUrl: 'perfil/editar-datos',
                                                                 backButtonUrl: ''
                                                               }},
+      { path: 'perfil/editar-datos', component: EditarDatosComponent, data: {
+                                                                simpleHeader: true,
+                                                                titulo: 'Editar perfil',
+                                                                leftButtonIcon: '',
+                                                                leftButtonUrl: '',
+                                                                backButtonUrl: 'perfil/'
+                                                              }},
+      { path: 'perfil/amigos', component: AmigosComponent, data: {
+                                                                simpleHeader: true,
+                                                                titulo: 'Gestionar amigos',
+                                                                leftButtonIcon: '',
+                                                                leftButtonUrl: '',
+                                                                backButtonUrl: 'perfil/'
+                                                              }},
+                                                                                                                      
       { path: '**', redirectTo: 'home' }
     ]
   }

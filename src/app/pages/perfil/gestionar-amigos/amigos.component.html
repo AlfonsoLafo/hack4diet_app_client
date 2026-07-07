@@ -1,0 +1,75 @@
+<div class="ion-padding friends-page">
+
+  <ion-card class="my-code-card">
+    <ion-card-content class="ion-text-center">
+      <h3>Mi Código de Amigo</h3>
+      <div class="code-container">
+        <h2>{{ miCodigo }}</h2>
+        <ion-button fill="clear" (click)="copiarCodigo()">
+          <ion-icon name="copy-outline" slot="icon-only"></ion-icon>
+        </ion-button>
+      </div>
+      <p>Comparte este código para que otros te añadan.</p>
+    </ion-card-content>
+  </ion-card>
+
+  <div class="add-friend-section">
+    <ion-item lines="none" class="input-item">
+      <ion-input placeholder="Introduce un código..." [(ngModel)]="codigoInput" class="ion-text-uppercase"></ion-input>
+      <ion-button slot="end" shape="round" (click)="enviarSolicitud()" [disabled]="!codigoInput">
+        Añadir
+      </ion-button>
+    </ion-item>
+  </div>
+
+  <div class="section-title" *ngIf="solicitudes.length > 0">
+    <h4>Solicitudes Pendientes</h4>
+  </div>
+
+  <ion-list lines="none" class="friends-list" *ngIf="solicitudes.length > 0">
+    <ion-item *ngFor="let sol of solicitudes" class="friend-item pending-item">
+      <ion-avatar slot="start">
+        <ion-icon name="person-circle" class="fallback-avatar"></ion-icon>
+      </ion-avatar>
+      <ion-label>
+        <h2>{{ sol.nombre }}</h2>
+        <p class="pending-text">PENDIENTE</p>
+      </ion-label>
+      
+      <div slot="end" class="action-buttons">
+        <ion-button color="success" fill="clear" (click)="confirmarRespuestaSolicitud(sol.uid, sol.nombre, 'ACEPTAR')">
+          <ion-icon name="checkmark-circle" slot="icon-only"></ion-icon>
+        </ion-button>
+        
+        <ion-button color="danger" fill="clear" (click)="confirmarRespuestaSolicitud(sol.uid, sol.nombre, 'RECHAZAR')">
+          <ion-icon name="close-circle" slot="icon-only"></ion-icon>
+        </ion-button>
+      </div>
+    </ion-item>
+  </ion-list>
+
+  <div class="section-title">
+    <h4>Mis Amigos ({{ amigos.length }})</h4>
+  </div>
+
+  <ion-list lines="none" class="friends-list">
+    <div class="empty-state ion-text-center" *ngIf="amigos.length === 0">
+      <ion-icon name="people-outline"></ion-icon>
+      <p>Aún no tienes amigos añadidos.</p>
+    </div>
+
+    <ion-item *ngFor="let amigo of amigos" class="friend-item">
+      <ion-avatar slot="start">
+        <ion-icon name="person-circle" class="fallback-avatar"></ion-icon>
+      </ion-avatar>
+      <ion-label>
+        <h2>{{ amigo.nombre }}</h2>
+      </ion-label>
+      
+      <ion-button slot="end" color="medium" fill="clear" (click)="confirmarEliminarAmigo(amigo.uid, amigo.nombre)">
+        <ion-icon name="trash-outline" slot="icon-only"></ion-icon>
+      </ion-button>
+    </ion-item>
+  </ion-list>
+
+</div>

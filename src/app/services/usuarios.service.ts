@@ -62,10 +62,24 @@ export class UsuariosService {
       .pipe(
         tap((res: any) => {
           const { token, uid, nombre, email, sexo, altura, edad, pesoInicial, pesoObjetivo, pesoActual,
-            pesoHistorico, plan, distribucionComidas, configuracion } = res;
+            pesoHistorico, plan, distribucionComidas, configuracion, codigoAmigo,
+            puntos, rachaActual, maximaRacha, avatar, amigos, solicitudesAmistad, insigniasDestacada, recetasGuardadas } = res;
+
           localStorage.setItem('token', token);
           this.usuario = new Usuario(uid, nombre, email, null, sexo, altura, edad, pesoInicial, pesoObjetivo, pesoActual,
-            pesoHistorico, plan, distribucionComidas, configuracion);
+            pesoHistorico, plan, distribucionComidas, configuracion, codigoAmigo,
+            puntos, 
+            rachaActual, 
+            maximaRacha, 
+            avatar,
+            amigos,
+            solicitudesAmistad,
+            insigniasDestacada, 
+            recetasGuardadas || []
+          );
+
+          // Probablemente no el mejor sitio para hacerlo, pero no voy a crear un nuevo service solo para esto.
+          this.aplicarTemaDOM(this.usuario.configuracion?.tema);
         }),
         map (res => {
           return correcto;
@@ -77,16 +91,39 @@ export class UsuariosService {
       );
   }
 
+  
   validarToken(): Observable<boolean> {
     return this.validar(true, false);
   }
-
+  
   validarNoToken(): Observable<boolean> {
     return this.validar(false, true);
   }
-
+  
   cleanLocalStorage(): void{
     localStorage.removeItem('token');
+  }
+  
+  private aplicarTemaDOM(tema: string = 'CLARO') {
+    if (tema === 'OSCURO') {
+      document.body.classList.add('dark');
+    } else {
+      document.body.classList.remove('dark');
+    }
+  }
+
+  actualizarTema(esOscuro: boolean) {
+    const nuevoTema = esOscuro ? 'OSCURO' : 'CLARO';
+    
+    if (!this.usuario.configuracion) {
+      this.usuario.configuracion = { tema: 'CLARO' };
+    }
+    
+    this.usuario.configuracion.tema = nuevoTema;
+    this.aplicarTemaDOM(nuevoTema);
+
+    // Guardamos silenciosamente en el backend
+    return this.updateUser(this.usuario);
   }
 
   get token(): string {
@@ -143,5 +180,21 @@ export class UsuariosService {
 
   get configuracion() {
     return this.usuario.configuracion;
+  }
+
+  get puntos(): number {
+    return this.usuario.puntos;
+  }
+
+  get codigoAmigo() : string {
+    return this.usuario.codigoAmigo;
+  }
+
+  get amigos() : any {
+    return this.usuario.amigos;
+  }
+
+  get solicitudesAmistad() : any {
+    return this.usuario.solicitudesAmistad;
   }
 }

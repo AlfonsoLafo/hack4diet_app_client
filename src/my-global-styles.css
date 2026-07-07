@@ -14,7 +14,7 @@ body {
   --ion-background-color: var(--ion-color-light);
 
   /* --- Variables del Pager --- */
-  --pager-casing-bg: #f3f4f6;
+  --pager-casing-bg: #f3f4f6;   
   --pager-casing-border: #d1d5db;
   --pager-brand-color: #4b5563;
   --pager-btn-bg: #e5e7eb;

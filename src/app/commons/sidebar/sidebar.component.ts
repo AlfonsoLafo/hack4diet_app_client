@@ -12,7 +12,7 @@ import { UsuariosService } from 'src/app/services/usuarios.service';
 export class SidebarComponent implements OnInit {
 
   simpleHeader: boolean = false;
-  isDarkMode: boolean = true;
+  isDarkMode: boolean;
 
   sidebarItems = [
     { nombre: 'Inicio', icono: 'home', url: '/home' },
@@ -33,7 +33,9 @@ export class SidebarComponent implements OnInit {
     this.getData().subscribe(data => {
       this.simpleHeader = data['simpleHeader']
     });
-    this.applyTheme();
+    
+    this.isDarkMode = this.usuariosService.configuracion?.tema == "OSCURO";
+    this.usuariosService.actualizarTema(this.isDarkMode);
   }
 
   getData() {
@@ -50,14 +52,6 @@ export class SidebarComponent implements OnInit {
 
   toggleTheme() {
     this.isDarkMode = !this.isDarkMode;
-    this.applyTheme();
-  }
-
-  applyTheme() {
-    if (this.isDarkMode) {
-      document.body.classList.add('dark');
-    } else {
-      document.body.classList.remove('dark');
-    }
+    this.usuariosService.actualizarTema(this.isDarkMode);
   }
 }

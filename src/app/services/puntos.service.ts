@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { ToastController } from '@ionic/angular';
 import { tap } from 'rxjs/operators';
 import { environment } from '../../environments/environment';
@@ -15,8 +15,16 @@ export class PuntosService {
     private toastController: ToastController
   ) { }
 
+  getHistorialPuntos(desde?: string, hasta?: string) {
+    let params = new HttpParams();
+    if (desde) params = params.set('desde', desde);
+    if (hasta) params = params.set('hasta', hasta);
+
+    return this.http.get(`${environment.base_url}/historial-puntos`, getHeaders()); 
+  }
+
   registrarPuntos(puntosGanados: number, justificacion: string, showToast: boolean = true) {
-    const url = `${environment.base_url}/historial-puntos`; // Ajusta según tu backend
+    const url = `${environment.base_url}/historial-puntos`;
     
     return this.http.post(url, { puntosGanados, justificacion }, getHeaders())
       .pipe(

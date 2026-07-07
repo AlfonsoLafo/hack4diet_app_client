@@ -28,25 +28,18 @@ export class Usuario {
       tema?: string;
     },
     // ---- NUEVOS CAMPOS AÑADIDOS ----
-    public puntos?: number,
-    public rachaActual?: number,
-    public historialRachas?: {
-      fechaInicio: Date | string;
-      fechaFin?: Date | string;
-    },
-    public maximaRacha?: number,
-    public insigniasDesbloqueadas?: string[], // Mapeado como array de IDs (strings)
-    public insigniasDestacada?: string,       // ID del documento de Insignia
-    public avatar?: string,                   // ID del documento de Avatar
     public codigoAmigo?: string,
-    public amigos?: string[],                 // Array de IDs de otros Usuarios
-    public solicitudesAmistad?: string[],     // Array de IDs de otros Usuarios
-    public misionesCompletadas?: string[],    // Array de IDs de Misiones
-    public recetasGuardadas?: string[],       // Array de IDs de Recetas
+    public puntos?: number,
+    public insigniasDesbloqueadas?: string[],
+    public insigniasDestacada?: string,
+    public avatar?: string,
+    public amigos?: string[],
+    public solicitudesAmistad?: string[],
+    public recetasGuardadas?: string[],
     public opcionesPrivacidad?: {
       currentStreak?: boolean;
       maximumStreak?: boolean;
-      level?: boolean; // Incluido ya que venía por defecto en el backend
+      level?: boolean;
       points?: boolean;
       badges?: boolean;
     }
