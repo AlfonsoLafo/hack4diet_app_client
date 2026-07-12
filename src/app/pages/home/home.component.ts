@@ -8,6 +8,7 @@ import { forkJoin } from 'rxjs';
 import { RachaService } from 'src/app/services/racha.service';
 import { MisionDiariaService } from 'src/app/services/mision-diaria.service';
 import { PuntosService } from 'src/app/services/puntos.service';
+import { PerfilService } from 'src/app/services/perfil.service';
 
 interface DiaCalendario {
   nombre: string;
@@ -62,7 +63,8 @@ export class HomeComponent  implements OnInit {
     private exceptionsService: ExceptionsService,
     private rachaService: RachaService,
     private misionService: MisionDiariaService,
-    private puntosService: PuntosService
+    private puntosService: PuntosService,
+    private perfilService: PerfilService
   ) { }
 
   ngOnInit() {
@@ -174,7 +176,7 @@ export class HomeComponent  implements OnInit {
           // Llamamos al servicio. El .subscribe() es necesario para que se ejecute la petición HTTP.
           this.puntosService.registrarPuntos(
             this.misionViendo.puntosOtorgados, 
-            'completar tu misión diaria', 
+            'Misión completada: ' + this.misionOriginal, 
             true
           ).subscribe();
         }
@@ -391,6 +393,7 @@ export class HomeComponent  implements OnInit {
         this.crearDiario();
       } else {
         this.diario = res['diario'];
+        this.comprobarObjetivoDiario();
         this.loadingDiario = false;
       }
     }, (err) => {
@@ -413,4 +416,17 @@ export class HomeComponent  implements OnInit {
     this.router.navigateByUrl(url);
   }
 
+  comprobarObjetivoDiario() {
+    if (!this.diario || !this.planUsuario) return;
+
+    const porcentajeCalorias = (this.diario.caloriasConsumidas / this.planUsuario.caloriasDiarias) * 100;
+    const porcentajeCarbos = (this.diario.carbosConsumidos / this.planUsuario.carbosDiarios) * 100;
+    const porcentajeProteinas = (this.diario.proteinasConsumidas / this.planUsuario.proteinasDiarias) * 100;
+    const porcentajeGrasas = (this.diario.grasasConsumidas / this.planUsuario.grasasDiarias) * 100;
+    const objetivoAlcanzado = porcentajeCalorias >= 100 && porcentajeCarbos >= 100 && porcentajeProteinas >= 100 && porcentajeGrasas >= 100;
+
+    if (objetivoAlcanzado) {
+      this.perfilService.unlockProgressCopper(true);
+    }
+  }
 }

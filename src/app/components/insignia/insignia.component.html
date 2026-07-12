@@ -1,0 +1,17 @@
+<div class="badge-item {{ insignia?.class ? insignia.class : 'empty-slot' }}" [class.locked]="bloqueada">
+  
+  <ng-container *ngIf="insignia">
+    <ion-icon [name]="getIconoPrincipal(insignia.class || '')" class="main-icon"></ion-icon>
+    
+    <div class="stars-badge" [class.white-star]="insignia.class?.includes('badge-special')">
+      <ion-icon name="star" *ngFor="let s of getEstrellas(insignia.class || '')"></ion-icon>
+    </div>
+    
+    <ion-icon name="lock-closed" class="lock-icon" *ngIf="bloqueada"></ion-icon>
+  </ng-container>
+
+  <ng-container *ngIf="!insignia">
+    <ion-icon name="add-outline" class="add-icon"></ion-icon>
+  </ng-container>
+
+</div>

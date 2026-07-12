@@ -14,6 +14,8 @@ import { DistribucionComidasModalComponent } from './perfil-modals/distribucion-
 import { CambiarPasswordModalComponent } from './perfil-modals/cambiar-password-modal/cambiar-password-modal.component';
 import { NivelActividadModalComponent } from './perfil-modals/nivel-actividad-modal/nivel-actividad-modal.component';
 import { NgApexchartsModule } from 'ng-apexcharts';
+import { PersonalizarPerfilComponent } from './personalizar-perfil/personalizar-perfil.component';
+import { PrivacidadModalComponent } from './perfil-modals/opciones-privacidad-modal/opciones-privacidad-modal.component';
 
 @NgModule({
   declarations: [
@@ -25,6 +27,8 @@ import { NgApexchartsModule } from 'ng-apexcharts';
     DistribucionComidasModalComponent,
     CambiarPasswordModalComponent,
     NivelActividadModalComponent,
+    PersonalizarPerfilComponent,
+    PrivacidadModalComponent,
   ],
   exports: [],
   imports: [

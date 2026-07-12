@@ -39,7 +39,6 @@ export class DiariosService {
     data.append('fecha', fecha.toISOString());
     data.append('aguaConsumida', diario.aguaConsumida.toString());
     data.append('caloriasConsumidas', diario.caloriasConsumidas.toString());
-    console.log(data);
     return this.http.put(`${environment.base_url}/diarios/${diario.uid}`, data, getHeaders());
   }
 

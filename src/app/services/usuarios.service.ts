@@ -63,19 +63,19 @@ export class UsuariosService {
         tap((res: any) => {
           const { token, uid, nombre, email, sexo, altura, edad, pesoInicial, pesoObjetivo, pesoActual,
             pesoHistorico, plan, distribucionComidas, configuracion, codigoAmigo,
-            puntos, rachaActual, maximaRacha, avatar, amigos, solicitudesAmistad, insigniasDestacada, recetasGuardadas } = res;
+            puntos, insigniasDesbloqueadas, insigniasDestacada, avatar, amigos, solicitudesAmistad, recetasGuardadas, opcionesPrivacidad } = res;
 
           localStorage.setItem('token', token);
           this.usuario = new Usuario(uid, nombre, email, null, sexo, altura, edad, pesoInicial, pesoObjetivo, pesoActual,
             pesoHistorico, plan, distribucionComidas, configuracion, codigoAmigo,
-            puntos, 
-            rachaActual, 
-            maximaRacha, 
+            puntos,
+            insigniasDesbloqueadas,
+            insigniasDestacada,
             avatar,
             amigos,
-            solicitudesAmistad,
-            insigniasDestacada, 
-            recetasGuardadas || []
+            solicitudesAmistad, 
+            recetasGuardadas,
+            opcionesPrivacidad || []
           );
 
           // Probablemente no el mejor sitio para hacerlo, pero no voy a crear un nuevo service solo para esto.
@@ -112,18 +112,29 @@ export class UsuariosService {
     }
   }
 
-  actualizarTema(esOscuro: boolean) {
+actualizarTema(esOscuro: boolean) {
+    if (!this.usuario) {
+      return;
+    }
+
     const nuevoTema = esOscuro ? 'OSCURO' : 'CLARO';
     
     if (!this.usuario.configuracion) {
-      this.usuario.configuracion = { tema: 'CLARO' };
+      this.usuario.configuracion = { tema: nuevoTema };
+    } else {
+      this.usuario.configuracion.tema = nuevoTema;
     }
     
-    this.usuario.configuracion.tema = nuevoTema;
     this.aplicarTemaDOM(nuevoTema);
 
-    // Guardamos silenciosamente en el backend
-    return this.updateUser(this.usuario);
+    this.updateUser(this.usuario).subscribe({
+      next: () => {
+        console.log(`Tema ${nuevoTema} guardado correctamente en la BD`);
+      },
+      error: (err) => {
+        console.error('Error al guardar el tema en el backend', err);
+      }
+    });
   }
 
   get token(): string {
@@ -196,5 +207,21 @@ export class UsuariosService {
 
   get solicitudesAmistad() : any {
     return this.usuario.solicitudesAmistad;
+  }
+
+  get insigniasDesbloqueadas() : any {
+    return this.usuario.insigniasDesbloqueadas;
+  }
+
+  get insigniaDestacada() : any {
+    return this.usuario.insigniasDestacada;
+  }
+
+  get opcionesPrivacidad() : any {
+    return this.usuario.opcionesPrivacidad;
+  }
+
+  get avatar() : any {
+    return this.usuario.avatar;
   }
 }

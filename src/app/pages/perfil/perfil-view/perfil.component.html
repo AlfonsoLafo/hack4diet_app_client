@@ -1,7 +1,7 @@
 <div class="perfil-container ion-padding gamified-profile">
   <ion-card class="main-profile-card">
     
-    <ion-button fill="clear" class="edit-profile-btn" routerLink="editar-avatar">
+    <ion-button fill="clear" class="edit-profile-btn" routerLink="personalizar">
       <ion-icon name="create-outline" slot="icon-only"></ion-icon>
     </ion-button>
 
@@ -30,11 +30,10 @@
         
       </div>
 
-      <div class="featured-badges">
-        <div class="badge unlocked"><ion-icon name="trophy"></ion-icon></div>
-        <div class="badge unlocked"><ion-icon name="star"></ion-icon></div>
-        <div class="badge locked"><ion-icon name="lock-closed"></ion-icon></div>
-        <div class="badge locked"><ion-icon name="lock-closed"></ion-icon></div>
+      <div class="featured-badges-grid">
+        <div class="featured-slot" *ngFor="let insignia of misInsigniasDestacadas">
+          <app-insignia [insignia]="insignia"></app-insignia>
+        </div>
       </div>
 
     </ion-card-content>
@@ -96,13 +95,13 @@
     </div>
 
     <div class="leaderboard-list">
-      <ion-card *ngFor="let jugador of leaderboard; let i = index" 
+      <ion-card *ngFor="let amigo of leaderboard; let i = index" 
                 class="leaderboard-card"
                 [ngClass]="{
                   'rank-1': i === 0, 
                   'rank-2': i === 1, 
                   'rank-3': i === 2,
-                  'is-me': jugador.esYo
+                  'is-me': amigo.esYo
                 }">
         
         <ion-card-content class="leaderboard-item">
@@ -112,17 +111,17 @@
           
           <div class="lb-info">
             <div class="lb-name">
-              {{ jugador.nombre }}
-              <span *ngIf="jugador.esYo" class="you-tag">(Tú)</span>
+              {{ amigo.nombre }}
+              <span *ngIf="amigo.esYo" class="you-tag">(Tú)</span>
             </div>
             <div class="lb-stats">
-              LV {{ jugador.puntos !== undefined ? calcularNivel(jugador.puntos) : '?' }} • 
-              {{ jugador.puntos !== undefined ? (jugador.puntos | number) : '---' }} XP
+              LV {{ amigo.puntos !== undefined ? calcularNivel(amigo.puntos) : '?' }} • 
+              {{ amigo.puntos !== undefined ? (amigo.puntos | number) : '---' }} XP
             </div>
           </div>
           
-          <div class="lb-streak" *ngIf="jugador.rachaActual !== undefined; else noRacha">
-            <span>{{ jugador.rachaActual }}</span> 
+          <div class="lb-streak" *ngIf="amigo.rachaActual !== undefined; else noRacha">
+            <span>{{ amigo.rachaActual }}</span> 
             <ion-icon name="flame"></ion-icon>
           </div>
           <ng-template #noRacha>

@@ -22,6 +22,7 @@ import { RegistroActividadRealizadaComponent } from './actividad-fisica/registro
 import { Modelo3dComponent } from './modelo3d/modelo3d.component';
 import { FotosProgresoComponent } from './fotos-progreso/fotos-progreso.component';
 import { AmigosComponent } from './perfil/gestionar-amigos/amigos.component';
+import { PersonalizarPerfilComponent } from './perfil/personalizar-perfil/personalizar-perfil.component';
 
 const routes: Routes = [
   { path: '', component: AdminLayoutComponent, canActivate: [AuthGuard],
@@ -161,6 +162,13 @@ const routes: Routes = [
                                                                 leftButtonUrl: '',
                                                                 backButtonUrl: 'perfil/'
                                                               }},
+      { path: 'perfil/personalizar', component: PersonalizarPerfilComponent, data: {
+                                                                simpleHeader: true,
+                                                                titulo: 'Personalizar',
+                                                                leftButtonIcon: '',
+                                                                leftButtonUrl: '',
+                                                                backButtonUrl: 'perfil/'
+                                                              }},                                                        
                                                                                                                       
       { path: '**', redirectTo: 'home' }
     ]

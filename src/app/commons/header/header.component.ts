@@ -35,16 +35,21 @@ export class HeaderComponent  implements OnInit {
       this.leftButtonUrl = data['leftButtonUrl'];
       this.backButtonUrl = data['backButtonUrl'];
 
-      if (this.leftButtonIcon === 'flame-outline') {
+      if (this.leftButtonIcon === 'flame-outline' || this.leftButtonIcon === 'flame') {
+        
+        if (this.rachaService.registradaHoyCache !== undefined) {
+          this.leftButtonIcon = this.rachaService.registradaHoyCache ? 'flame' : 'flame-outline';
+          this.rachaActual = this.rachaService.rachaActualCache;
+        }
+
         this.rachaService.obtenerRachaActual().subscribe({
           next: (res: any) => {
             if (res.ok) {
               this.rachaActual = res.rachaActual;             
-              if (res.rachaRegistradaHoy) {
-                this.leftButtonIcon = 'flame';
-              } else {
-                this.leftButtonIcon = 'flame-outline';
-              }
+              this.leftButtonIcon = res.rachaRegistradaHoy ? 'flame' : 'flame-outline';
+
+              this.rachaService.rachaActualCache = res.rachaActual;
+              this.rachaService.registradaHoyCache = res.rachaRegistradaHoy;
             }
           },
           error: (err) => {

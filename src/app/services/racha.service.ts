@@ -10,6 +10,8 @@ import { getHeaders } from '../utils/headers.utils';
 export class RachaService {
 
   idUsuario: string = this.usuariosService.uid;
+  public rachaActualCache?: number;
+  public registradaHoyCache?: boolean;
 
   constructor(
     private http: HttpClient, 

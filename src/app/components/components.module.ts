@@ -13,6 +13,7 @@ import { NumberPickerComponent } from './number-picker/number-picker.component';
 import { LoaderComponent } from './loader/loader.component';
 import { UploadFormComponent } from './upload-form/upload-form.component';
 import { RachaModalComponent } from './racha-modal/racha-modal.component';
+import { InsigniaComponent } from './insignia/insignia.component';
 
 @NgModule({
   declarations: [
@@ -21,7 +22,8 @@ import { RachaModalComponent } from './racha-modal/racha-modal.component';
     NumberPickerComponent,
     LoaderComponent,
     UploadFormComponent,
-    RachaModalComponent
+    RachaModalComponent,
+    InsigniaComponent
   ],
   exports: [
     ProgressBarComponent,
@@ -29,7 +31,8 @@ import { RachaModalComponent } from './racha-modal/racha-modal.component';
     NumberPickerComponent,
     LoaderComponent,
     UploadFormComponent,
-    RachaModalComponent
+    RachaModalComponent,
+    InsigniaComponent
   ],
   imports: [
     IonicModule,

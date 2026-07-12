@@ -10,6 +10,9 @@ import { RachaService } from 'src/app/services/racha.service';
 import { ToastService } from 'src/app/services/toast.service';
 import { getAbrebiaturaUnidadMedida } from 'src/app/utils/unidad-medida.utils';
 import { ModalController } from '@ionic/angular';
+import { PerfilService } from 'src/app/services/perfil.service';
+import { PuntosService } from 'src/app/services/puntos.service';
+import { UsuariosService } from 'src/app/services/usuarios.service';
 
 @Component({
   selector: 'app-registro-alimento-form',
@@ -44,7 +47,11 @@ export class RegistroAlimentoFormComponent  implements OnInit {
     private diariosService: DiariosService,
     private exceptionsService: ExceptionsService,
     private modalController: ModalController,
-    private rachaService: RachaService) { }
+    private rachaService: RachaService,
+    private perfilService: PerfilService,
+    private puntosService: PuntosService,
+    private usuarioService: UsuariosService
+  ) { }
 
   ngOnInit() {
     const idAlimento: string = this.diariosService.idAlimentoActual;
@@ -92,7 +99,6 @@ export class RegistroAlimentoFormComponent  implements OnInit {
     }
 
     this.saving = true;
-
     this.errorMensaje = '';
 
     const alimentoAgregar: any = {
@@ -102,16 +108,29 @@ export class RegistroAlimentoFormComponent  implements OnInit {
     }
 
     this.rachaService.actualizarRacha().subscribe(async (res: any) => {
-      //if (res.ok && res.puntosGanados) {
       if (res.ok) {
-        const modal = await this.modalController.create({
-          component: RachaModalComponent,
-          componentProps: {
-            rachaActual: res.rachaActual,
-            puntosGanados: res.puntosGanados
-          }
-        });
-        await modal.present();
+        this.perfilService.unlockProgressSilver(res.rachaActual);
+        if (res.puntosGanados && res.puntosGanados > 0) {
+          
+          const motivo = 'Recompensa por racha diaria';
+          
+          this.puntosService.registrarPuntos(res.puntosGanados, motivo, false).subscribe({
+            next: (puntosRes: any) => {
+
+              const nivelActual = puntosRes.nivelActual;
+              this.perfilService.unlockProgressGold(nivelActual);
+            },
+            error: (err) => console.error('Error al registrar los puntos:', err)
+          });
+          const modal = await this.modalController.create({
+            component: RachaModalComponent,
+            componentProps: {
+              rachaActual: res.rachaActual,
+              puntosGanados: res.puntosGanados
+            }
+          });
+          await modal.present();
+        }
       }
     });
 

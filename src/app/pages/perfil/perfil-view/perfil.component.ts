@@ -3,6 +3,7 @@ import { PuntosService } from 'src/app/services/puntos.service';
 import { UsuariosService } from 'src/app/services/usuarios.service';
 import { RachaService } from 'src/app/services/racha.service';
 import { AmigosService } from 'src/app/services/amigos.service';
+import { PerfilService } from 'src/app/services/perfil.service';
 
 @Component({
   selector: 'app-perfil',
@@ -12,6 +13,8 @@ import { AmigosService } from 'src/app/services/amigos.service';
 export class PerfilComponent implements OnInit, AfterViewInit {
 
   chartOptionsXP: any;
+  misInsigniasDestacadas: any[] = [null, null, null, null];
+  avatar: any;
   
   nombreUsuario: string = '';
   nivelActual: number = 1;
@@ -26,7 +29,8 @@ export class PerfilComponent implements OnInit, AfterViewInit {
     private puntosService: PuntosService,
     private usuariosService: UsuariosService,
     private rachaService: RachaService,
-    private amigosService: AmigosService
+    private amigosService: AmigosService,
+    private perfilService: PerfilService
   ) { }
 
   ngAfterViewInit() {    
@@ -39,6 +43,31 @@ export class PerfilComponent implements OnInit, AfterViewInit {
     this.cargarDatosUsuario();
     this.cargarRachas();
     this.cargarTablaClasificacion();
+    this.cargarDatosPersonalizacion()
+  }
+
+  cargarDatosPersonalizacion() {
+    this.perfilService.getAvatares().subscribe({
+      next: (res) => this.avatar = this.usuariosService.avatar,
+      error: (err) => console.log('Error avatares', err)
+    });
+
+    this.perfilService.getInsignias().subscribe({
+      next: (res) => {
+        const insigniasBD = res.insignias || [];
+        const destacadasIDs = this.usuariosService.insigniaDestacada || []; 
+
+        for (let i = 0; i < 4; i++) {
+          if (destacadasIDs[i]) {
+            const insigniaCompleta = insigniasBD.find(ins => ins._id === destacadasIDs[i] || ins.uid === destacadasIDs[i]);
+            this.misInsigniasDestacadas[i] = insigniaCompleta || null;
+          } else {
+            this.misInsigniasDestacadas[i] = null;
+          }
+        }
+      },
+      error: (err) => console.log('Error insignias', err)
+    });
   }
 
   cargarRachas() {
@@ -62,6 +91,7 @@ export class PerfilComponent implements OnInit, AfterViewInit {
     this.puntosActuales = this.usuariosService.puntos;
     
     this.nivelActual = Math.floor(0.2 * Math.sqrt(this.puntosActuales)) + 1;
+    this.perfilService.unlockProgressGold(this.nivelActual);
     this.puntosSiguienteNivel = 25 * Math.pow(this.nivelActual, 2);
   }
 
@@ -77,6 +107,8 @@ export class PerfilComponent implements OnInit, AfterViewInit {
     this.amigosService.getLeaderboard(miCodigo).subscribe({
       next: (res: any) => {
         this.leaderboard = res.leaderboard || [];
+        this.perfilService.unlockSocialSilver(this.leaderboard.length - 1);
+        this.perfilService.unlockSocialGold(this.leaderboard.findIndex(entry => entry.codigoAmigo === miCodigo));
       },
       error: (err) => {
         console.error('Error al cargar el leaderboard:', err);
@@ -96,7 +128,6 @@ export class PerfilComponent implements OnInit, AfterViewInit {
 
     this.puntosService.getHistorialPuntos(desde, hasta).subscribe((res: any) => {
       const entradas = res.historial || res.entradas || res; 
-      
       this.procesarDatos(entradas, hoy);
     });
   }

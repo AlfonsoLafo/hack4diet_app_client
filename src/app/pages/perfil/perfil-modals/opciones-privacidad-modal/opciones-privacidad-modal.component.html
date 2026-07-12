@@ -1,0 +1,56 @@
+<ion-header class="ion-no-border">
+  <ion-toolbar>
+    <ion-title>Privacidad</ion-title>
+    <ion-buttons slot="end">
+      <ion-button (click)="cerrar()">
+        <ion-icon name="close-outline" slot="icon-only"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding">
+  
+  <div class="header-info">
+    <h2>Configura tu perfil público</h2>
+    <p>Elige qué datos estadísticos pueden ver tus amigos cuando visiten tu perfil o consulten la tabla de clasificación.</p>
+  </div>
+
+  <ion-list class="privacy-list" lines="full">
+    
+    <ion-item>
+      <ion-label>
+        <h2>Racha actual</h2>
+      </ion-label>
+      <ion-toggle slot="end" [(ngModel)]="privacidad.currentStreak"></ion-toggle>
+    </ion-item>
+
+    <ion-item>
+      <ion-label>
+        <h2>Racha máxima</h2>
+      </ion-label>
+      <ion-toggle slot="end" [(ngModel)]="privacidad.maximumStreak"></ion-toggle>
+    </ion-item>
+
+    <ion-item>
+      <ion-label>
+        <h2>Nivel y Puntos (XP)</h2>
+      </ion-label>
+      <ion-toggle slot="end" [(ngModel)]="privacidad.points"></ion-toggle>
+    </ion-item>
+
+    <ion-item>
+      <ion-label>
+        <h2>Insignias</h2>
+      </ion-label>
+      <ion-toggle slot="end" [(ngModel)]="privacidad.badges"></ion-toggle>
+    </ion-item>
+
+  </ion-list>
+
+  <ion-button color="success" expand="block" (click)="guardarCambios()" [disabled]="guardando">
+      <span *ngIf="!guardando">Guardar cambios</span>
+      <ion-spinner *ngIf="guardando" name="crescent"></ion-spinner>
+  </ion-button>
+
+</ion-content>

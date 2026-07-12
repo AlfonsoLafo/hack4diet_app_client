@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { ActivationEnd, Router } from '@angular/router';
 import { MenuController } from '@ionic/angular';
 import { Subscription, filter, map } from 'rxjs';
+import { PerfilService } from 'src/app/services/perfil.service';
 import { UsuariosService } from 'src/app/services/usuarios.service';
 
 @Component({
@@ -27,7 +28,12 @@ export class SidebarComponent implements OnInit {
     // { nombre: 'Configuración', icono: 'settings', url: '/configuracion' },
   ]
 
-  constructor(private router: Router, private menuController: MenuController, private usuariosService: UsuariosService) { }
+  constructor(
+    private router: Router, 
+    private menuController: MenuController, 
+    private usuariosService: UsuariosService,
+    private perfilService: PerfilService
+  ) { }
 
   ngOnInit() {
     this.getData().subscribe(data => {
@@ -53,5 +59,6 @@ export class SidebarComponent implements OnInit {
   toggleTheme() {
     this.isDarkMode = !this.isDarkMode;
     this.usuariosService.actualizarTema(this.isDarkMode);
+    this.perfilService.unlockSpecialDark(this.isDarkMode);
   }
 }

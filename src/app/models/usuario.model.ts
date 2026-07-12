@@ -31,7 +31,7 @@ export class Usuario {
     public codigoAmigo?: string,
     public puntos?: number,
     public insigniasDesbloqueadas?: string[],
-    public insigniasDestacada?: string,
+    public insigniasDestacada?: string[],
     public avatar?: string,
     public amigos?: string[],
     public solicitudesAmistad?: string[],

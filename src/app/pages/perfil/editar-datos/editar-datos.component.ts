@@ -10,6 +10,7 @@ import { CambiarPlanModalComponent } from '../perfil-modals/cambiar-plan-modal/c
 import { Router } from '@angular/router';
 import { ExceptionsService } from 'src/app/services/exceptions.service';
 import { NivelActividadModalComponent } from '../perfil-modals/nivel-actividad-modal/nivel-actividad-modal.component';
+import { PrivacidadModalComponent } from '../perfil-modals/opciones-privacidad-modal/opciones-privacidad-modal.component';
 
 
 
@@ -208,5 +209,11 @@ export class EditarDatosComponent  implements OnInit {
     });
     modal.present();
   }
-
+  
+  async openPrivacidadModal() {
+    const modal = await this.modalController.create({
+      component: PrivacidadModalComponent, // El componente que vamos a crear ahora
+    });
+    await modal.present();
+  }
 }

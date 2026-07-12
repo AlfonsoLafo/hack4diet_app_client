@@ -277,6 +277,36 @@
   }
 }
 
+.featured-badges-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 10px;
+  padding: 10px 0;
+
+  .featured-slot {
+    aspect-ratio: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    .empty-slot {
+      width: 100%;
+      height: 100%;
+      border: 2px dashed var(--ion-color-medium);
+      border-radius: 50%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      opacity: 0.5;
+
+      ion-icon {
+        font-size: 1.8rem;
+        color: var(--ion-color-medium);
+      }
+    }
+  }
+}
+
 /* Ajustes modo oscuro */
 :host-context(body.dark) {
   .leaderboard-card {

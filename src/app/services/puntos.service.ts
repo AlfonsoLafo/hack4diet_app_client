@@ -63,7 +63,7 @@ export class PuntosService {
   private async generarToast(mensaje: string, color: string, cssClass: string, icon: string) {
     const toast = await this.toastController.create({
       message: mensaje,
-      duration: 3500, // Un pelín más de tiempo para que lo lean bien
+      duration: 3500,
       position: 'top',
       color: color,
       icon: icon,
