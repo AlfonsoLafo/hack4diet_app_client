@@ -23,6 +23,8 @@ import { Modelo3dComponent } from './modelo3d/modelo3d.component';
 import { FotosProgresoComponent } from './fotos-progreso/fotos-progreso.component';
 import { AmigosComponent } from './perfil/gestionar-amigos/amigos.component';
 import { PersonalizarPerfilComponent } from './perfil/personalizar-perfil/personalizar-perfil.component';
+import { RecetaFormComponent } from './alimentos/receta-form/receta-form.component';
+import { RecetaViewComponent } from './alimentos/receta-view/receta-view.component';
 
 const routes: Routes = [
   { path: '', component: AdminLayoutComponent, canActivate: [AuthGuard],
@@ -71,6 +73,27 @@ const routes: Routes = [
                                                                     leftButtonUrl: '',
                                                                     backButtonUrl: ''
                                                                   }},
+      { path: 'recetas/form/nueva', component: RecetaFormComponent, data: {
+                                                                    simpleHeader: true,
+                                                                    titulo: 'Nueva receta',
+                                                                    leftButtonIcon: '',
+                                                                    leftButtonUrl: '',
+                                                                    backButtonUrl: '/alimentos/list'
+                                                                  }},
+      { path: 'recetas/form/:idReceta', component: RecetaFormComponent, data: {
+                                                                    simpleHeader: true,
+                                                                    titulo: 'Editar receta', 
+                                                                    leftButtonIcon: '',
+                                                                    leftButtonUrl: '',
+                                                                    backButtonUrl: '/alimentos/list'
+                                                                  }},
+      { path: 'recetas/view/:idReceta', component: RecetaViewComponent, data: {
+                                                                    simpleHeader: true,
+                                                                    titulo: 'Ver receta',
+                                                                    leftButtonIcon: '',
+                                                                    leftButtonUrl: '',
+                                                                    backButtonUrl: '/alimentos/list'
+                                                                  }},                                                                
       /********** Peso *************/
       { path: 'registros-peso', component: PesosViewComponent, data: {
                                                                     simpleHeader: false,

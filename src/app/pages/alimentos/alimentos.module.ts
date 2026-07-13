@@ -12,6 +12,8 @@ import { AlimentosListComponent } from './alimentos-list/alimentos-list.componen
 import { RegistroAlimentoFormComponent } from './registro-alimento-form/registro-alimento-form.component';
 import { AlimentoFormComponent } from './alimento-form/alimento-form.component';
 import { AlimentosBarcodeScannerComponent } from './alimentos-barcode-scanner/alimentos-barcode-scanner.component';
+import { RecetaFormComponent } from './receta-form/receta-form.component';
+import { RecetaViewComponent } from './receta-view/receta-view.component';
 
 @NgModule({
   declarations: [
@@ -20,6 +22,8 @@ import { AlimentosBarcodeScannerComponent } from './alimentos-barcode-scanner/al
     RegistroAlimentoFormComponent,
     AlimentoFormComponent,
     AlimentosBarcodeScannerComponent,
+    RecetaFormComponent,
+    RecetaViewComponent,
   ],
   exports: [
     AlimentosViewComponent,
@@ -27,6 +31,8 @@ import { AlimentosBarcodeScannerComponent } from './alimentos-barcode-scanner/al
     RegistroAlimentoFormComponent,
     AlimentoFormComponent,
     AlimentosBarcodeScannerComponent,
+    RecetaFormComponent,
+    RecetaViewComponent,
   ],
   imports: [
     IonicModule,

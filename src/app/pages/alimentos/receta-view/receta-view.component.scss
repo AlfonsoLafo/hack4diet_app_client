@@ -1,0 +1,52 @@
+ion-card-content {
+  padding: 0px;
+}
+
+ion-list {
+  padding: 0px;
+}
+
+ion-label {
+  margin: 0;
+}
+
+ion-card-title {
+  font-size: medium;
+}
+
+ion-button {
+  text-transform: none;
+}
+
+ion-item {
+  border: none;
+  margin-bottom: 5px;
+}
+
+.flex-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.subtitle {
+  color: var(--ion-color-medium);
+  font-size: 0.9rem;
+  margin: 0;
+}
+
+.macro-val {
+  font-weight: bold;
+  font-size: 1.1rem;
+}
+
+.cal-val {
+  font-weight: bold;
+  font-size: 1.3rem;
+}
+
+.input-porciones {
+  border: 1px solid var(--ion-color-light-shade, #ccc);
+  border-radius: 8px;
+  padding: 5px;
+}

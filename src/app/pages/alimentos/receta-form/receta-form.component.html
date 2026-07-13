@@ -1,0 +1,136 @@
+<form #recetaForm="ngForm" class="ion-padding" (ngSubmit)="onSubmit(recetaForm)">
+
+  <ion-item lines="none">
+    <ion-input
+      type="text"
+      label="Nombre de la receta *"
+      labelPlacement="floating"
+      ngModel
+      name="nombre"
+      #nombre="ngModel"
+      [(ngModel)]="nombreInput"
+      required>
+    </ion-input>
+  </ion-item>
+  <ion-text color="danger" *ngIf="nombre.invalid && nombre.touched">
+    <p class="ion-padding-start">El nombre es obligatorio</p>
+  </ion-text>
+
+  <ion-item lines="none">
+    <ion-textarea
+      label="Descripción (opcional)"
+      labelPlacement="floating"
+      ngModel
+      name="descripcion"
+      [(ngModel)]="descripcionInput">
+    </ion-textarea>
+  </ion-item>
+
+  <ion-grid>
+    <ion-row>
+      <ion-col>
+        <ion-item lines="none">
+          <ion-select ngModel name="dificultad" [(ngModel)]="dificultadSelect" label="Dificultad *" labelPlacement="floating" required>
+            <ion-select-option value="FACIL">Fácil</ion-select-option>
+            <ion-select-option value="MEDIA">Media</ion-select-option>
+            <ion-select-option value="DIFICIL">Difícil</ion-select-option>
+          </ion-select>
+        </ion-item>
+      </ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col>
+        <ion-item lines="none">
+          <ion-input type="number" label="Tiempo (min) *" labelPlacement="floating" ngModel name="tiempo" [(ngModel)]="tiempoInput" required></ion-input>
+        </ion-item>
+      </ion-col>
+      <ion-col>
+        <ion-item lines="none">
+          <ion-input type="number" label="Porciones *" labelPlacement="floating" ngModel name="porciones" [(ngModel)]="porcionesInput" required></ion-input>
+        </ion-item>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+
+  <!-- ======= INGREDIENTES ======= -->
+  <ion-list-header>
+    <ion-label>Ingredientes</ion-label>
+  </ion-list-header>
+  <ion-item lines="none" *ngFor="let ing of ingredientes; let i = index; trackBy: trackByIndex">
+    <ion-input
+      type="text"
+      [name]="'ingrediente' + i"
+      [(ngModel)]="ingredientes[i]"
+      placeholder="Ej: 200g de harina"
+      required>
+    </ion-input>
+    <ion-button slot="end" color="danger" fill="clear" (click)="removeIngrediente(i)" *ngIf="ingredientes.length > 1">
+      <ion-icon name="trash-outline" slot="icon-only"></ion-icon>
+    </ion-button>
+  </ion-item>
+  <ion-button fill="clear" (click)="addIngrediente()">
+    <ion-icon name="add-outline" slot="start"></ion-icon> Añadir ingrediente
+  </ion-button>
+
+  <!-- ======= PASOS ======= -->
+  <ion-list-header>
+    <ion-label>Pasos de preparación</ion-label>
+  </ion-list-header>
+  <ion-item lines="none" *ngFor="let paso of pasos; let i = index; trackBy: trackByIndex">
+    <ion-textarea
+      [name]="'paso' + i"
+      [(ngModel)]="pasos[i]"
+      [placeholder]="'Paso ' + (i + 1)"
+      autoGrow="true"
+      required>
+    </ion-textarea>
+    <ion-button slot="end" color="danger" fill="clear" (click)="removePaso(i)" *ngIf="pasos.length > 1">
+      <ion-icon name="trash-outline" slot="icon-only"></ion-icon>
+    </ion-button>
+  </ion-item>
+  <ion-button fill="clear" (click)="addPaso()">
+    <ion-icon name="add-outline" slot="start"></ion-icon> Añadir paso
+  </ion-button>
+
+  <!-- ======= INFORMACIÓN NUTRICIONAL ======= -->
+  <ion-list-header>
+    <ion-label>Información nutricional (Total de la receta)</ion-label>
+  </ion-list-header>
+
+  <ion-item lines="none">
+    <ion-input type="number" ngModel name="calorias" #calorias="ngModel" label="Calorías *" labelPlacement="floating" [(ngModel)]="caloriasInput" required></ion-input>
+  </ion-item>
+  <ion-text color="danger" *ngIf="calorias.invalid && calorias.touched">
+    <p class="ion-padding-start">Las calorías son obligatorias</p>
+  </ion-text>
+
+  <ion-item lines="none">
+    <ion-input type="number" ngModel name="carbohidratos" #carbohidratos="ngModel" label="Carbohidratos *" labelPlacement="floating" [(ngModel)]="carbosInput" required></ion-input>
+  </ion-item>
+
+  <ion-item lines="none">
+    <ion-input type="number" ngModel name="proteinas" #proteinas="ngModel" label="Proteínas *" labelPlacement="floating" [(ngModel)]="proteinasInput" required></ion-input>
+  </ion-item>
+
+  <ion-item lines="none">
+    <ion-input type="number" ngModel name="grasas" #grasas="ngModel" label="Grasas *" labelPlacement="floating" [(ngModel)]="grasasInput" required></ion-input>
+  </ion-item>
+
+  <!-- ======= PRIVACIDAD ======= -->
+  <ion-list-header>
+    <ion-label>Privacidad</ion-label>
+  </ion-list-header>
+  <ion-item lines="none">
+    <ion-toggle name="publico" [(ngModel)]="publicoToggle">Visible para mis amigos</ion-toggle>
+  </ion-item>
+
+  <ion-row class="ion-margin-top">
+    <ion-col>
+      <ion-button color="success" expand="block" type="submit" [disabled]="!recetaForm.valid || saving">
+        <i class="fas fa-spinner fa-spin ion-margin-end" *ngIf="saving"></i>
+        Guardar Receta
+      </ion-button>
+    </ion-col>
+  </ion-row>
+
+</form>

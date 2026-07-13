@@ -221,6 +221,10 @@ actualizarTema(esOscuro: boolean) {
     return this.usuario.opcionesPrivacidad;
   }
 
+  get recetasGuardadas() : any {
+    return this.usuario.recetasGuardadas;
+  }
+
   get avatar() : any {
     return this.usuario.avatar;
   }

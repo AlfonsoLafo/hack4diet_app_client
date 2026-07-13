@@ -7,6 +7,9 @@
     <ion-segment-button value="mis-alimentos">
       <ion-label>Mis alimentos</ion-label>
     </ion-segment-button>
+    <ion-segment-button value="recetas">
+      <ion-label>Recetas</ion-label>
+    </ion-segment-button>
   </ion-segment>
   <!-- ======= Fin Segments ======== -->
 
@@ -28,19 +31,32 @@
 
   <!-- ======= Lista resultados ======== -->
   <ion-list *ngIf="listaResultados.length > 0">
-    <ion-item *ngFor="let resultado of listaResultados" color="light" (click)="registrarAlimentoConsumido(resultado)">
+    <ion-item *ngFor="let resultado of listaResultados" color="light" (click)="seleccionarItem(resultado)">
       <ion-label class="flex-container">
         <div class="left-side">
           <div style="font-size: 14px;">{{ resultado.nombre }}</div>
-          <p class="subtitle">{{ getSubtituloAlimento(resultado) }}</p>
+          
+          <!-- Subtítulo de Alimento -->
+          <p class="subtitle" *ngIf="segmentActual !== 'recetas'">{{ getSubtituloAlimento(resultado) }}</p>
+          
+          <!-- Subtítulo de Receta -->
+          <p class="subtitle" *ngIf="segmentActual === 'recetas'">Por: {{ resultado.autor?.username || 'Desconocido' }}</p>
         </div>
-        <div class="right-side">
+        <div class="right-side" style="display: flex; flex-direction: column; align-items: flex-end;">
           <div>{{ resultado.calorias }} cal</div>
           <div>
             <span class="secondary-color">H: {{ (resultado.carbohidratos) }}</span>
             <span class="warning-color"> P: {{ resultado.proteinas }}</span>
             <span class="custom-yellow-color"> G: {{ resultado.grasas }}</span>
           </div>
+          
+          <!-- Estrella de favoritos solo para recetas de amigos -->
+          <ion-icon
+            *ngIf="segmentActual === 'recetas' && resultado.idPropietario !== miId"
+            [name]="esRecetaGuardada(resultado) ? 'star' : 'star-outline'"
+            style="color: var(--ion-color-custom-yellow); font-size: 1.5rem; margin-top: 5px; z-index: 10;"
+            (click)="toggleFavorito(resultado, $event)">
+          </ion-icon>
         </div>
       </ion-label>
     </ion-item>
@@ -65,6 +81,14 @@
     </ion-fab-list>
   </ion-fab>
   <!-- ======= Fin Boton crear alimento ======== -->
+   
+  <!-- ======= Boton crear receta ======== -->
+  <ion-fab *ngIf="segmentActual === 'recetas'" slot="fixed" vertical="bottom" horizontal="end">
+    <ion-fab-button color="secondary" routerLink="/recetas/form/nueva">
+      <ion-icon name="add-outline"></ion-icon>
+    </ion-fab-button>
+  </ion-fab>
+  <!-- ======= Fin Boton crear receta ======== -->
 </div>
 
 <app-loader *ngIf="capturandoAlimento" message="Capturando alimento"></app-loader>

@@ -1,0 +1,114 @@
+<div class="ion-padding">
+  <div class="ion-padding ion-text-center" *ngIf="loading">
+    <ion-spinner color="secondary"></ion-spinner>
+  </div>
+
+  <div *ngIf="!loading && receta">
+    
+    <!-- ====== Cabecera de la receta ====== -->
+    <ion-card>
+      <ion-card-header>
+        <ion-card-title>
+          <div class="flex-container">
+            <div><b>{{ receta.nombre }}</b></div>
+            <div class="right-side">
+              <ion-badge color="tertiary">{{ receta.dificultad }}</ion-badge>
+            </div>
+          </div>
+        </ion-card-title>
+        <p class="subtitle ion-margin-top" *ngIf="receta.descripcion">{{ receta.descripcion }}</p>
+      </ion-card-header>
+
+      <ion-card-content class="ion-padding-bottom">
+         <ion-row class="ion-text-center">
+            <ion-col>
+              <ion-icon name="time-outline" style="font-size: 1.5rem;"></ion-icon>
+              <div>{{ receta.tiempoPreparacion }} min</div>
+            </ion-col>
+            <ion-col>
+              <ion-icon name="pie-chart-outline" style="font-size: 1.5rem;"></ion-icon>
+              <div>{{ receta.porciones }} porciones base</div>
+            </ion-col>
+         </ion-row>
+      </ion-card-content>
+    </ion-card>
+
+    <!-- ====== Valores Nutricionales (Por 1 porción) ====== -->
+    <ion-card>
+      <ion-card-header>
+        <ion-card-title>Nutrición (por 1 porción)</ion-card-title>
+      </ion-card-header>
+      <ion-card-content class="ion-padding-bottom">
+        <ion-row class="ion-text-center">
+          <ion-col>
+            <div class="cal-val">{{ (receta.calorias / (receta.porciones || 1)) | number:'1.0-0' }}</div>
+            <div>Cal</div>
+          </ion-col>
+          <ion-col>
+            <div class="macro-val secondary-color">{{ (receta.carbohidratos / (receta.porciones || 1)) | number:'1.0-1' }}g</div>
+            <div>Carbos</div>
+          </ion-col>
+          <ion-col>
+            <div class="macro-val warning-color">{{ (receta.proteinas / (receta.porciones || 1)) | number:'1.0-1' }}g</div>
+            <div>Prot</div>
+          </ion-col>
+          <ion-col>
+            <div class="macro-val custom-yellow-color">{{ (receta.grasas / (receta.porciones || 1)) | number:'1.0-1' }}g</div>
+            <div>Grasas</div>
+          </ion-col>
+        </ion-row>
+      </ion-card-content>
+    </ion-card>
+
+    <!-- ====== Ingredientes ====== -->
+    <ion-card>
+      <ion-card-header>
+        <ion-card-title>Ingredientes</ion-card-title>
+      </ion-card-header>
+      <ion-card-content>
+        <ion-list>
+          <ion-item *ngFor="let ing of receta.ingredientes">
+            <ion-label class="ion-text-wrap">
+              <ion-icon name="ellipse" style="font-size: 0.5rem; margin-right: 8px;"></ion-icon> {{ ing }}
+            </ion-label>
+          </ion-item>
+        </ion-list>
+      </ion-card-content>
+    </ion-card>
+
+    <!-- ====== Pasos ====== -->
+    <ion-card>
+      <ion-card-header>
+        <ion-card-title>Preparación</ion-card-title>
+      </ion-card-header>
+      <ion-card-content>
+        <ion-list>
+          <ion-item *ngFor="let paso of receta.pasos; let i = index">
+            <ion-label class="ion-text-wrap">
+              <b style="color: var(--ion-color-secondary);">Paso {{ i + 1 }}:</b> {{ paso }}
+            </ion-label>
+          </ion-item>
+        </ion-list>
+      </ion-card-content>
+    </ion-card>
+
+    <!-- ====== Formulario de Registro ====== -->
+    <div class="ion-padding" style="margin-bottom: 30px;">
+      <ion-item lines="none" class="input-porciones">
+        <ion-input 
+          type="number" 
+          label="¿Cuántas porciones vas a consumir?" 
+          labelPlacement="stacked"
+          [(ngModel)]="porcionesInput" 
+          placeholder="Ej: 1">
+        </ion-input>
+      </ion-item>
+
+      <ion-button color="success" expand="block" class="ion-margin-top" [disabled]="saving || porcionesInput <= 0" (click)="registrarReceta()">
+        <i class="fas fa-spinner fa-spin ion-margin-end" *ngIf="saving"></i>
+        Añadir al diario
+      </ion-button>
+    </div>
+
+  </div>
+</div>
