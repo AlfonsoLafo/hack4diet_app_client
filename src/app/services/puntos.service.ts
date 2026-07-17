@@ -4,6 +4,7 @@ import { ToastController } from '@ionic/angular';
 import { tap } from 'rxjs/operators';
 import { environment } from '../../environments/environment';
 import { getHeaders } from '../utils/headers.utils';
+import { UsuariosService } from './usuarios.service';
 
 @Injectable({
   providedIn: 'root'
@@ -12,7 +13,8 @@ export class PuntosService {
 
   constructor(
     private http: HttpClient,
-    private toastController: ToastController
+    private toastController: ToastController,
+    private usuariosService: UsuariosService
   ) { }
 
   getHistorialPuntos(desde?: string, hasta?: string) {
@@ -30,6 +32,7 @@ export class PuntosService {
       .pipe(
         tap(async (res: any) => {
           if (res.ok) {
+            this.usuariosService.sumarPuntosLocal(puntosGanados);
             if (res.subioDeNivel) {
               
               // 1. Toast de Subida de Nivel (Prioridad)

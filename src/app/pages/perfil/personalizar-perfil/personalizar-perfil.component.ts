@@ -70,6 +70,7 @@ export class PersonalizarPerfilComponent implements OnInit {
 
   seleccionarAvatar(avatar: any) {
     // Lógica para equipar avatar...
+    // No se ha llegado a implementar
   }
 
   gestionarInsignia(insignia: any) {

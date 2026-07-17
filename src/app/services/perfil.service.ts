@@ -20,6 +20,7 @@ export class PerfilService {
   ) { }
 
   getAvatares(): Observable<any> {
+    // Sin uso actual
     return this.http.get(this.avataresUrl);
   }
 
@@ -132,6 +133,7 @@ export class PerfilService {
 
   unlockChefCopper(usadaReceta?: boolean): boolean {
     const clase = 'badge-copper badge-chef';
+
     if (this.hasBadge(clase)) return true;
     if (usadaReceta === undefined || usadaReceta === null) return false;
 

@@ -134,7 +134,6 @@ export class RegistroAlimentoFormComponent  implements OnInit {
       }
     });
 
-
     this.diariosService.addAlimentoConsumido(this.idDiario, alimentoAgregar).subscribe(res => {
       this.router.navigateByUrl('/alimentos');
       this.toastService.presentToast('Alimento añadido', 'success');

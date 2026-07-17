@@ -10,6 +10,9 @@ export class ExceptionsService {
 
   throwError(err) {
     console.error(err);
+
+    alert(`Status: ${err.status} | Error: ${err.message}`);
+
     const msg = err.error.msg || 'Ha ocurrido un error, inténtelo de nuevo';
     this.toastService.presentToast(msg, 'danger');
   }

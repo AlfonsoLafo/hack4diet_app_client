@@ -98,22 +98,16 @@ export class AlimentosListComponent  implements OnInit {
   cargarRecetasCombinadas() {
     this.loading = true;
 
-    // Obtenemos el array de amigos del usuario actual
     const amigos = this.usuariosService.amigos || [];
-
-    // Creamos un array de peticiones (Observables) individuales por cada amigo
     const peticionesAmigos = amigos.map((amigo: any) => {
-      // Extraemos el código de amigo (adaptable por si tu array tiene objetos o strings)
       const codigo = amigo.codigoAmigo || amigo; 
       
       return this.recetasService.getRecetasAmigo(codigo).pipe(
-        // Si la petición de un amigo falla (ej. código incorrecto), devolvemos un array vacío 
-        // en lugar de romper todo el forkJoin principal
+        // Si la petición falla devolvemos un array vacío 
         catchError(() => of({ ok: true, recetas: [] }))
       );
     });
 
-    // Disparamos todas las peticiones a la vez
     forkJoin({
       propias: this.recetasService.getRecetasUsuario(this.miId),
       guardadas: this.recetasService.getRecetasGuardadas(this.miId),
@@ -124,7 +118,7 @@ export class AlimentosListComponent  implements OnInit {
         let todas: any[] = [];
         const idsYaAñadidos = new Set(); // Para evitar duplicados rápidos
         
-        // 1. Añadimos las PROPIAS
+        // RECETAS PROPIAS
         if (res.propias.ok) {
           res.propias.recetas.forEach((r: any) => {
             todas.push(r);
@@ -132,7 +126,7 @@ export class AlimentosListComponent  implements OnInit {
           });
         }
 
-        // 2. Añadimos las GUARDADAS
+        // RECETAS GUARDADAS
         if (res.guardadas.ok) {
           res.guardadas.recetas.forEach((r: any) => {
             const id = r._id || r.uid;
@@ -144,7 +138,7 @@ export class AlimentosListComponent  implements OnInit {
           });
         }
 
-        // 3. Añadimos las de los AMIGOS
+        // RECETAS DE AMIGOS
         if (Array.isArray(res.amigos)) {
           res.amigos.forEach((resAmigo: any) => {
             if (resAmigo && resAmigo.ok && resAmigo.recetas) {
@@ -159,13 +153,11 @@ export class AlimentosListComponent  implements OnInit {
           });
         }
 
-        // Si el usuario ha escrito en el buscador, filtramos localmente por nombre
         if (this.textoBusqueda.trim() !== '') {
           const busquedaLimpia = this.textoBusqueda.toLowerCase().trim();
           todas = todas.filter(r => (r.nombre || r.titulo).toLowerCase().includes(busquedaLimpia));
         }
 
-        // ORDENACIÓN: 1º Guardadas (favoritos), 2º Feed Amigos y Propias
         this.listaResultados = todas.sort((a, b) => {
           const aGuardada = this.esRecetaGuardada(a) ? 1 : 0;
           const bGuardada = this.esRecetaGuardada(b) ? 1 : 0;
@@ -180,6 +172,26 @@ export class AlimentosListComponent  implements OnInit {
         this.loading = false;
       }
     });
+  }
+
+  getNombreAutor(idPropietario: string): string {
+    if (!idPropietario) return 'Desconocido';
+
+    if (idPropietario.toString() === this.miId.toString()) {
+      return 'Mí';
+    }
+
+    const amigos = this.usuariosService.amigos || [];
+    const amigoEncontrado = amigos.find((a: any) => {
+      const idAmigo = a.uid;
+      return idAmigo && idAmigo.toString() === idPropietario.toString();
+    });
+
+    if (amigoEncontrado && amigoEncontrado.nombre) {
+      return amigoEncontrado.nombre;
+    }
+
+    return 'Desconocido';
   }
 
   esRecetaGuardada(receta: any): boolean {

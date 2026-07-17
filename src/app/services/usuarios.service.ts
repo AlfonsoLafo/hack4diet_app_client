@@ -137,6 +137,13 @@ actualizarTema(esOscuro: boolean) {
     });
   }
 
+  // Los puntos no se actualizan en la base de datos aquí, solo en memoria.
+  sumarPuntosLocal(puntos: number) {
+    if (this.usuario && this.usuario.puntos !== undefined) {
+      this.usuario.puntos += puntos;
+    }
+  }
+
   get token(): string {
     return localStorage.getItem('token') || '';
   }

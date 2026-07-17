@@ -8,6 +8,11 @@ import { ExceptionsService } from 'src/app/services/exceptions.service';
 import { AlimentosService } from 'src/app/services/alimentos.service';
 import { Alimento } from 'src/app/models/alimento.model';
 import { UsuariosService } from 'src/app/services/usuarios.service';
+import { RachaModalComponent } from 'src/app/components/racha-modal/racha-modal.component';
+import { RachaService } from 'src/app/services/racha.service';
+import { PuntosService } from 'src/app/services/puntos.service';
+import { PerfilService } from 'src/app/services/perfil.service';
+import { ModalController } from '@ionic/angular';
 
 @Component({
   selector: 'app-receta-view',
@@ -23,6 +28,7 @@ export class RecetaViewComponent implements OnInit {
 
   // En lugar de gramos, pedimos porciones. Por defecto 1.
   porcionesInput: number = 1;
+  miId: string = '';
 
   constructor(
     private activatedRoute: ActivatedRoute,
@@ -32,12 +38,17 @@ export class RecetaViewComponent implements OnInit {
     private toastService: ToastService,
     private exceptionsService: ExceptionsService,
     private alimentosService: AlimentosService,
-    private usuariosService: UsuariosService
+    private usuariosService: UsuariosService,
+    private perfilService: PerfilService,
+    private puntosService: PuntosService,
+    private rachaService: RachaService,
+    private modalController: ModalController
   ) { }
 
   ngOnInit() {
     this.idReceta = this.activatedRoute.snapshot.params['idReceta'];
-    
+    this.miId = this.usuariosService.uid;
+
     this.cargarReceta();
   }
   cargarReceta() {
@@ -62,43 +73,41 @@ registrarReceta() {
     const idDiario = this.diariosService.idDiarioActual;
     const categoria = this.diariosService.categoriaActual;
 
-    // --- NUEVO BLINDAJE ---
-    // Si por algún motivo se perdió el ID del diario (ej: recargar la página), 
+    // Si por algún motivo se perdió el ID del diario
     // abortamos y devolvemos al usuario al inicio para que reinicie el flujo.
+    // Esto ya me ha pasado antes.
     if (!idDiario) {
       this.toastService.presentToast('Se ha perdido la conexión con el diario. Vuelve a intentarlo.', 'warning');
-      this.router.navigateByUrl('/home'); // O la ruta donde esté tu diario
+      this.router.navigateByUrl('/home');
       return;
     }
-    // ----------------------
 
     this.saving = true;
 
-    // Generamos el nombre estandarizado para la porción base
     const nombreAlimentoReceta = this.receta.nombre;
 
-    // 1. Comprobamos si este alimento-receta ya se creó en el pasado (filtramos por marca)
+    // Comprobamos si este alimento-receta ya se creó en el pasado (filtramos por marca)
     this.alimentosService.cargarAlimentosPorUsuario(10, nombreAlimentoReceta).subscribe({
       next: (res: any) => {
         const alimentosEncontrados = res.alimentos || [];
-        // Nos aseguramos de que sea nuestra receta y no un alimento con el mismo nombre
+
         const alimentoExistente = alimentosEncontrados.find((a: any) => 
            a.nombre === nombreAlimentoReceta && a.marca === 'Receta'
         );
 
         if (alimentoExistente) {
-          // 2A. Ya existe: Lo añadimos directamente al diario
+          // Si ya existe: Lo añadimos directamente al diario
           this.agregarAlDiario(idDiario, alimentoExistente.uid, this.porcionesInput, categoria);
         } else {
-          // 2B. No existe: Creamos el alimento base
+          // Si no existe: Creamos el alimento base
           const porcionesTotales = this.receta.porciones || 1;
           
           const nuevoAlimento = new Alimento(
             '', 
-            nombreAlimentoReceta, // Nombre limpio
-            'Receta', // Marca exacta
+            nombreAlimentoReceta,
+            'Receta',
             1, 
-            'porciones', // Unidad personalizada
+            'porciones',
             Number((this.receta.calorias / porcionesTotales).toFixed(0)),
             Number((this.receta.carbohidratos / porcionesTotales).toFixed(1)),
             Number((this.receta.proteinas / porcionesTotales).toFixed(1)),
@@ -115,6 +124,33 @@ registrarReceta() {
               this.exceptionsService.throwError(err);
             }
           });
+          this.rachaService.actualizarRacha().subscribe(async (res: any) => {
+            if (res.ok) {
+              this.perfilService.unlockProgressSilver(res.rachaActual);
+              if (res.puntosGanados && res.puntosGanados > 0) {
+                
+                const motivo = 'Recompensa por racha diaria';
+                
+                this.puntosService.registrarPuntos(res.puntosGanados, motivo, false).subscribe({
+                  next: (puntosRes: any) => {
+      
+                    const nivelActual = puntosRes.nivelActual;
+                    this.perfilService.unlockProgressGold(nivelActual);
+                  },
+                  error: (err) => console.error('Error al registrar los puntos:', err)
+                });
+                const modal = await this.modalController.create({
+                  component: RachaModalComponent,
+                  componentProps: {
+                    rachaActual: res.rachaActual,
+                    puntosGanados: res.puntosGanados
+                  }
+                });
+                await modal.present();
+              }
+            }
+          });
+          this.perfilService.unlockChefCopper(true);
         }
       },
       error: (err) => {
@@ -124,10 +160,8 @@ registrarReceta() {
     });
   }
 
-  // Método auxiliar para no repetir código
   private agregarAlDiario(idDiario: string, idAlimento: string, cantidad: number, categoria: string) {
     
-    // Construimos el objeto tal y como lo espera el backend
     const alimentoAgregar = {
       idAlimento: idAlimento,
       cantidad: cantidad,
@@ -145,5 +179,9 @@ registrarReceta() {
         this.exceptionsService.throwError(err);
       }
     });
+  }
+
+  openEditarReceta() {
+    this.router.navigateByUrl(`/recetas/form/${this.idReceta}`);
   }
 }

@@ -5,6 +5,7 @@ import { DiariosService } from 'src/app/services/diarios.service';
 import { ExceptionsService } from 'src/app/services/exceptions.service';
 import { ToastService } from 'src/app/services/toast.service';
 import { UsuariosService } from 'src/app/services/usuarios.service';
+import { PuntosService } from 'src/app/services/puntos.service';
 
 @Component({
   selector: 'app-consumo-agua',
@@ -25,7 +26,8 @@ export class ConsumoAguaComponent  implements OnInit {
     private toastService: ToastService,
     private usuariosService: UsuariosService,
     private alertController: AlertController,
-    private exceptionsService: ExceptionsService) { }
+    private exceptionsService: ExceptionsService,
+    private puntosService: PuntosService) { }
 
   ngOnInit() {
     this.cargarDiarioPorFecha(this.selectedDate);
@@ -59,14 +61,33 @@ export class ConsumoAguaComponent  implements OnInit {
   editarAguaConsumida(agua: number, manual: boolean) {
     if( agua == null || agua < 0) return;
 
-    this.diario.aguaConsumida = manual ? agua : this.diario.aguaConsumida + agua;
+    // Hay que guardar la cantiad para que no se pueda ganaar puntos varias veces al día
+    const aguaAnterior = this.diario.aguaConsumida || 0;
+    const nuevaAgua = manual ? agua : aguaAnterior + agua;
 
-    this.diariosService.updateDiario(this.diario).subscribe(res => {
-      this.toastService.presentToast('Cantidad editada', 'success');
-      this.cargarDiarioPorFecha(this.selectedDate);
-    }, (err) => {
-      this.exceptionsService.throwError(err);
-    })
+    this.diario.aguaConsumida = nuevaAgua;
+
+    this.diariosService.updateDiario(this.diario).subscribe({
+      next: (res) => {
+        this.toastService.presentToast('Cantidad editada', 'success');
+        
+        if (aguaAnterior < this.aguaRecomendada && nuevaAgua >= this.aguaRecomendada) {
+          const motivo = 'Alcanzar la cantidad recomendada de agua consumida';
+          
+          this.puntosService.registrarPuntos(20, motivo, true).subscribe({
+            next: (puntosRes: any) => {
+              this.usuariosService.sumarPuntosLocal(20);
+            },
+            error: (err) => console.error('Error al registrar los puntos de agua:', err)
+          });
+        }
+
+        this.cargarDiarioPorFecha(this.selectedDate);
+      }, 
+      error: (err) => {
+        this.exceptionsService.throwError(err);
+      }
+    });
   }
 
   async presentAlert() {

@@ -6,7 +6,9 @@ import { ActividadRealizada } from 'src/app/models/actividad-realizada.model';
 import { ActividadesFisicasService } from 'src/app/services/actividades-fisicas.service';
 import { ActividadesRealizadasService } from 'src/app/services/actividades-realizadas.service';
 import { ExceptionsService } from 'src/app/services/exceptions.service';
+import { PuntosService } from 'src/app/services/puntos.service';
 import { ToastService } from 'src/app/services/toast.service';
+import { UsuariosService } from 'src/app/services/usuarios.service';
 
 @Component({
   selector: 'app-registro-actividad-realizada',
@@ -38,7 +40,9 @@ export class RegistroActividadRealizadaComponent  implements OnInit {
     private activatedRoute: ActivatedRoute,
     private router: Router,
     private alertController: AlertController,
-    private exceptionsService: ExceptionsService
+    private exceptionsService: ExceptionsService,
+    private puntosService: PuntosService,
+    private usuariosService: UsuariosService
   ) { }
 
   ngOnInit() {
@@ -102,6 +106,17 @@ export class RegistroActividadRealizadaComponent  implements OnInit {
     this.actividadRealizada = new ActividadRealizada('', fecha, this.caloriasGastadas, this.duracion, this.notas, this.actividadFisicaPadre.uid);
 
     this.actividadesRealizadasService.createActividadRealizada(this.actividadRealizada).subscribe(res => {
+
+      const motivo = `Quemar ${this.caloriasGastadas} calorías realizando la actividad "${this.actividadFisicaPadre.nombre}"`;
+      const puntos = Math.round(this.caloriasGastadas / 10);
+
+      this.puntosService.registrarPuntos(puntos, motivo, true).subscribe({
+        next: (puntosRes: any) => {
+          this.usuariosService.sumarPuntosLocal(puntos);
+        },
+        error: (err) => console.error('Error al registrar los puntos de agua:', err)
+      });
+      
       this.router.navigateByUrl('/actividad-fisica');
       this.toastService.presentToast('Nueva actividad realizada', 'success');
       this.saving = false;
@@ -170,6 +185,4 @@ export class RegistroActividadRealizadaComponent  implements OnInit {
       this.caloriasGastadas = 0;
     }
   }
-
-
 }

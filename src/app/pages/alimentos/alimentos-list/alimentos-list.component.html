@@ -40,7 +40,7 @@
           <p class="subtitle" *ngIf="segmentActual !== 'recetas'">{{ getSubtituloAlimento(resultado) }}</p>
           
           <!-- Subtítulo de Receta -->
-          <p class="subtitle" *ngIf="segmentActual === 'recetas'">Por: {{ resultado.autor?.username || 'Desconocido' }}</p>
+          <p class="subtitle" *ngIf="segmentActual === 'recetas'">Por: {{ getNombreAutor(resultado.idPropietario) }}</p>
         </div>
         <div class="right-side" style="display: flex; flex-direction: column; align-items: flex-end;">
           <div>{{ resultado.calorias }} cal</div>

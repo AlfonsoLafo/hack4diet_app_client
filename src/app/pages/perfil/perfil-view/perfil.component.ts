@@ -90,7 +90,7 @@ export class PerfilComponent implements OnInit, AfterViewInit {
     this.nombreUsuario = this.usuariosService.nombre;
     this.puntosActuales = this.usuariosService.puntos;
     
-    this.nivelActual = Math.floor(0.2 * Math.sqrt(this.puntosActuales)) + 1;
+    this.nivelActual = this.calcularNivel(this.puntosActuales);
     this.perfilService.unlockProgressGold(this.nivelActual);
     this.puntosSiguienteNivel = 25 * Math.pow(this.nivelActual, 2);
   }

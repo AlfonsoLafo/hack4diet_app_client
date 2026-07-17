@@ -2,7 +2,6 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
 import { UsuariosService } from 'src/app/services/usuarios.service';
 import { Router } from '@angular/router';
-import { ToastService } from 'src/app/services/toast.service';
 import { ExceptionsService } from 'src/app/services/exceptions.service';
 
 @Component({
@@ -27,7 +26,9 @@ export class LoginComponent  implements OnInit {
     private usuariosService: UsuariosService,
     private exceptionsService: ExceptionsService) { }
 
-  ngOnInit() {}
+  ngOnInit() {
+    
+  }
 
   togglePassword() {
     this.showPassword = !this.showPassword;

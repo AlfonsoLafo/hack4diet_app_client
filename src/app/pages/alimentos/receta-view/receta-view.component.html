@@ -104,10 +104,21 @@
         </ion-input>
       </ion-item>
 
-      <ion-button color="success" expand="block" class="ion-margin-top" [disabled]="saving || porcionesInput <= 0" (click)="registrarReceta()">
-        <i class="fas fa-spinner fa-spin ion-margin-end" *ngIf="saving"></i>
-        Añadir al diario
-      </ion-button>
+      <ion-row class="ion-margin-top">
+        <ion-col>
+          <ion-button color="success" expand="block" [disabled]="saving || porcionesInput <= 0" (click)="registrarReceta()">
+            <i class="fas fa-spinner fa-spin ion-margin-end" *ngIf="saving"></i>
+            Añadir al diario
+          </ion-button>
+        </ion-col>
+        
+        <!-- Escondemos la columna entera si idPropietario no es igual a miId -->
+        <ion-col *ngIf="receta.idPropietario === miId">
+          <ion-button color="secondary" expand="block" (click)="openEditarReceta()">
+            Editar receta
+          </ion-button>
+        </ion-col>
+      </ion-row>
     </div>
 
   </div>
